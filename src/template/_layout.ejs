@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="<%= lang || 'en' %>">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> — <%= (typeof ui !== 'undefined' && ui && ui['jQuery API Documentation']) || 'jQuery API Documentation' %></title>
+  <link rel="stylesheet" href="<%= cssPath || 'assets/' %>style.css">
+  <script src="<%= cssPath || 'assets/' %>js/jquery.min.js"></script>
+</head>
+<body<%- typeof bodyClass !== 'undefined' ? ' class="' + bodyClass + '"' : '' %>>
+<div id="layout" class="layout-has-sidebar">
+  <nav id="sidebar">
+    <div id="sidebar-inner"></div>
+  </nav>
+  <main id="content">
+    <%- content %>
+  </main>
+</div>
+<script src="<%= sidebarJs || 'sidebar-data.js' %>"></script>
+<script>window.PAGE_ID='<%= typeof pageId !== "undefined" ? pageId : "" %>';window.PAGE_PREFIX='<%= typeof pagePrefix !== "undefined" ? pagePrefix : "" %>';</script>
+<script src="<%= appJs || '../app.js' %>"></script>
+</body>
+</html>
