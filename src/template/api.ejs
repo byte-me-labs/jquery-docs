@@ -74,6 +74,7 @@ function renderNotes(entryNotes, notesLookup) {
 %>
 <div class="api-page">
   <header class="api-header">
+    <a class="api-back" href="../cheatsheet.html">&larr; Cheatsheet</a>
     <h1><%= entry.title %></h1>
     <%- versionBadge(entry) %>
     <% if (entry.return && entry.type !== 'selector') { %>

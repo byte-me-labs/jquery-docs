@@ -38,12 +38,32 @@ async function main() {
     entryMap[entry.id] = entry;
   }
 
-  // Generate API detail pages
+  // Generate API detail pages — merge duplicate IDs (getter/setter pairs)
   console.log('  - Generating API pages...');
-  let apiCount = 0;
+  const mergedEntries = {};
   for (const entry of entries) {
+    if (!mergedEntries[entry.id]) {
+      mergedEntries[entry.id] = { ...entry };
+    } else {
+      const m = mergedEntries[entry.id];
+      // Merge signatures
+      m.signatures = (m.signatures || []).concat(entry.signatures || []);
+      // Keep the entry with content (examples, longdesc)
+      if (!m.longdesc && entry.longdesc) m.longdesc = entry.longdesc;
+      if (!m.desc && entry.desc) m.desc = entry.desc;
+      if ((!m.examples || m.examples.length === 0) && entry.examples && entry.examples.length > 0) {
+        m.examples = entry.examples;
+      }
+      if (!m.title && entry.title) m.title = entry.title;
+      if (!m.return && entry.return) m.return = entry.return;
+    }
+  }
+
+  let apiCount = 0;
+  for (const id of Object.keys(mergedEntries)) {
+    const entry = mergedEntries[id];
     // Render sidebar with current entry highlighted
-    const sidebarData = { ...commonData, currentId: entry.id };
+    const sidebarData = { ...commonData, currentId: id, linkPrefix: '../' };
     const sidebar = ejs.render(sidebarTemplate, sidebarData);
 
     // Render API content
@@ -53,29 +73,31 @@ async function main() {
     const fullPage = ejs.render(layoutTemplate, {
       title: entry.title,
       sidebar: sidebar,
-      content: apiContent
+      content: apiContent,
+      cssPath: '../assets/'
     });
 
-    const outputPath = path.join(outputDir, 'api', `${entry.id}.html`);
+    const outputPath = path.join(outputDir, 'api', `${id}.html`);
     await fs.writeFile(outputPath, fullPage, 'utf-8');
     apiCount++;
   }
-  console.log(`    Generated ${apiCount} API pages`);
+  console.log(`    Generated ${apiCount} API pages (${Object.keys(mergedEntries).length} unique)`);
 
   // Generate cheatsheet (wrapped in layout with sidebar)
   console.log('  - Generating cheatsheet...');
-  const csSidebar = ejs.render(sidebarTemplate, { ...commonData, currentId: 'cheatsheet' });
+  const csSidebar = ejs.render(sidebarTemplate, { ...commonData, currentId: 'cheatsheet', linkPrefix: '' });
   const csContent = ejs.render(cheatsheetTemplate, commonData);
   const csFullPage = ejs.render(layoutTemplate, {
     title: 'jQuery API Cheatsheet',
     sidebar: csSidebar,
-    content: csContent
+    content: csContent,
+    cssPath: 'assets/'
   });
   await fs.writeFile(path.join(outputDir, 'cheatsheet.html'), csFullPage, 'utf-8');
 
   // Generate index/home page
   console.log('  - Generating index page...');
-  const sidebar = ejs.render(sidebarTemplate, { ...commonData, currentId: null });
+  const sidebar = ejs.render(sidebarTemplate, { ...commonData, currentId: null, linkPrefix: '' });
   const indexContent = `<div class="home-placeholder"></div>`; // content handled inside index.ejs
   const indexHTML = ejs.render(indexTemplate, {
     ...commonData,

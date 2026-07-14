@@ -417,7 +417,7 @@
       }
     },
     {
-      "id": "visible",
+      "id": "visible-selector",
       "type": "selector",
       "name": ":visible Selector",
       "title": ":visible Selector",
@@ -672,7 +672,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "unload",
       "type": "method",
       "name": "unload event",
       "title": "unload event",
@@ -745,7 +745,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "unload",
       "type": "method",
       "name": "unload event",
       "title": "unload event",
@@ -784,7 +784,7 @@
       }
     },
     {
-      "id": "unload",
+      "id": "unload-shorthand",
       "type": "method",
       "name": ".unload()",
       "title": ".unload()",
@@ -1783,7 +1783,7 @@
       }
     },
     {
-      "id": "toggle",
+      "id": "toggle-event",
       "type": "method",
       "name": ".toggle()",
       "title": ".toggle()",
@@ -2031,7 +2031,7 @@
       }
     },
     {
-      "id": "text",
+      "id": "text-selector",
       "type": "selector",
       "name": ":text Selector",
       "title": ":text Selector",
@@ -2077,7 +2077,7 @@
       }
     },
     {
-      "id": "target",
+      "id": "target-selector",
       "type": "selector",
       "name": ":target Selector",
       "title": ":target Selector",
@@ -2106,7 +2106,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "submit",
       "type": "method",
       "name": "submit event",
       "title": "submit event",
@@ -2201,7 +2201,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "submit",
       "type": "method",
       "name": "submit event",
       "title": "submit event",
@@ -2240,7 +2240,7 @@
       }
     },
     {
-      "id": "submit",
+      "id": "submit-shorthand",
       "type": "method",
       "name": ".submit()",
       "title": ".submit()",
@@ -2328,7 +2328,7 @@
       }
     },
     {
-      "id": "submit",
+      "id": "submit-selector",
       "type": "selector",
       "name": ":submit Selector",
       "title": ":submit Selector",
@@ -3240,7 +3240,7 @@
       }
     },
     {
-      "id": "selected",
+      "id": "selected-selector",
       "type": "selector",
       "name": ":selected Selector",
       "title": ":selected Selector",
@@ -3286,7 +3286,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "select",
       "type": "method",
       "name": "select event",
       "title": "select event",
@@ -3366,7 +3366,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "select",
       "type": "method",
       "name": "select event",
       "title": "select event",
@@ -3405,7 +3405,7 @@
       }
     },
     {
-      "id": "select",
+      "id": "select-shorthand",
       "type": "method",
       "name": ".select()",
       "title": ".select()",
@@ -3667,7 +3667,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "scroll",
       "type": "method",
       "name": "scroll event",
       "title": "scroll event",
@@ -3740,7 +3740,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "scroll",
       "type": "method",
       "name": "scroll event",
       "title": "scroll event",
@@ -3779,7 +3779,7 @@
       }
     },
     {
-      "id": "scroll",
+      "id": "scroll-shorthand",
       "type": "method",
       "name": ".scroll()",
       "title": ".scroll()",
@@ -3867,7 +3867,7 @@
       }
     },
     {
-      "id": "root",
+      "id": "root-selector",
       "type": "selector",
       "name": ":root Selector",
       "title": ":root Selector",
@@ -3903,7 +3903,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "resize",
       "type": "method",
       "name": "resize event",
       "title": "resize event",
@@ -3976,7 +3976,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "resize",
       "type": "method",
       "name": "resize event",
       "title": "resize event",
@@ -4015,7 +4015,7 @@
       }
     },
     {
-      "id": "resize",
+      "id": "resize-shorthand",
       "type": "method",
       "name": ".resize()",
       "title": ".resize()",
@@ -4103,7 +4103,7 @@
       }
     },
     {
-      "id": "reset",
+      "id": "reset-selector",
       "type": "selector",
       "name": ":reset Selector",
       "title": ":reset Selector",
@@ -4753,7 +4753,7 @@
       }
     },
     {
-      "id": "radio",
+      "id": "radio-selector",
       "type": "selector",
       "name": ":radio Selector",
       "title": ":radio Selector",
@@ -5681,7 +5681,7 @@
       }
     },
     {
-      "id": "password",
+      "id": "password-selector",
       "type": "selector",
       "name": ":password Selector",
       "title": ":password Selector",
@@ -5908,7 +5908,7 @@
       }
     },
     {
-      "id": "parent",
+      "id": "parent-selector",
       "type": "selector",
       "name": ":parent Selector",
       "title": ":parent Selector",
@@ -6274,7 +6274,7 @@
       }
     },
     {
-      "id": "only-of-type",
+      "id": "only-of-type-selector",
       "type": "selector",
       "name": ":only-of-type Selector",
       "title": ":only-of-type Selector",
@@ -6310,7 +6310,7 @@
       }
     },
     {
-      "id": "only-child",
+      "id": "only-child-selector",
       "type": "selector",
       "name": ":only-child Selector",
       "title": ":only-child Selector",
@@ -7046,7 +7046,7 @@
       }
     },
     {
-      "id": "odd",
+      "id": "odd-selector",
       "type": "selector",
       "name": ":odd Selector",
       "title": ":odd Selector",
@@ -7101,7 +7101,7 @@
       }
     },
     {
-      "id": "nth-of-type",
+      "id": "nth-of-type-selector",
       "type": "selector",
       "name": ":nth-of-type() Selector",
       "title": ":nth-of-type() Selector",
@@ -7146,7 +7146,7 @@
       }
     },
     {
-      "id": "nth-last-of-type",
+      "id": "nth-last-of-type-selector",
       "type": "selector",
       "name": ":nth-last-of-type() Selector",
       "title": ":nth-last-of-type() Selector",
@@ -7197,7 +7197,7 @@
       }
     },
     {
-      "id": "nth-last-child",
+      "id": "nth-last-child-selector",
       "type": "selector",
       "name": ":nth-last-child() Selector",
       "title": ":nth-last-child() Selector",
@@ -7248,7 +7248,7 @@
       }
     },
     {
-      "id": "nth-child",
+      "id": "nth-child-selector",
       "type": "selector",
       "name": ":nth-child() Selector",
       "title": ":nth-child() Selector",
@@ -7411,7 +7411,7 @@
       }
     },
     {
-      "id": "not",
+      "id": "not-selector",
       "type": "selector",
       "name": ":not() Selector",
       "title": ":not() Selector",
@@ -7637,7 +7637,7 @@
       }
     },
     {
-      "id": "next siblings",
+      "id": "next-siblings-selector",
       "type": "selector",
       "name": "Next Siblings Selector (\"prev ~ siblings\")",
       "title": "Next Siblings Selector (\"prev ~ siblings\")",
@@ -7690,7 +7690,7 @@
       }
     },
     {
-      "id": "next adjacent",
+      "id": "next-adjacent-selector",
       "type": "selector",
       "name": "Next Adjacent Selector (\"prev + next\")",
       "title": "Next Adjacent Selector (\"prev + next\")",
@@ -7743,7 +7743,7 @@
       }
     },
     {
-      "id": "multiple",
+      "id": "multiple-selector",
       "type": "selector",
       "name": "Multiple Selector (\"selector1, selector2, selectorN\")",
       "title": "Multiple Selector (\"selector1, selector2, selectorN\")",
@@ -7810,7 +7810,7 @@
       }
     },
     {
-      "id": "attributeMultiple",
+      "id": "multiple-attribute-selector",
       "type": "selector",
       "name": "Multiple Attribute Selector [name=\"value\"][name2=\"value2\"]",
       "title": "Multiple Attribute Selector [name=\"value\"][name2=\"value2\"]",
@@ -7871,7 +7871,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "mouseup",
       "type": "method",
       "name": "mouseup event",
       "title": "mouseup event",
@@ -7944,7 +7944,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "mouseup",
       "type": "method",
       "name": "mouseup event",
       "title": "mouseup event",
@@ -7983,7 +7983,7 @@
       }
     },
     {
-      "id": "mouseup",
+      "id": "mouseup-shorthand",
       "type": "method",
       "name": ".mouseup()",
       "title": ".mouseup()",
@@ -8071,7 +8071,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "mouseover",
       "type": "method",
       "name": "mouseover event",
       "title": "mouseover event",
@@ -8144,7 +8144,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "mouseover",
       "type": "method",
       "name": "mouseover event",
       "title": "mouseover event",
@@ -8183,7 +8183,7 @@
       }
     },
     {
-      "id": "mouseover",
+      "id": "mouseover-shorthand",
       "type": "method",
       "name": ".mouseover()",
       "title": ".mouseover()",
@@ -8271,7 +8271,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "mouseout",
       "type": "method",
       "name": "mouseout event",
       "title": "mouseout event",
@@ -8344,7 +8344,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "mouseout",
       "type": "method",
       "name": "mouseout event",
       "title": "mouseout event",
@@ -8383,7 +8383,7 @@
       }
     },
     {
-      "id": "mouseout",
+      "id": "mouseout-shorthand",
       "type": "method",
       "name": ".mouseout()",
       "title": ".mouseout()",
@@ -8471,7 +8471,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "mousemove",
       "type": "method",
       "name": "mousemove event",
       "title": "mousemove event",
@@ -8544,7 +8544,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "mousemove",
       "type": "method",
       "name": "mousemove event",
       "title": "mousemove event",
@@ -8583,7 +8583,7 @@
       }
     },
     {
-      "id": "mousemove",
+      "id": "mousemove-shorthand",
       "type": "method",
       "name": ".mousemove()",
       "title": ".mousemove()",
@@ -8671,7 +8671,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "mouseleave",
       "type": "method",
       "name": "mouseleave event",
       "title": "mouseleave event",
@@ -8744,7 +8744,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "mouseleave",
       "type": "method",
       "name": "mouseleave event",
       "title": "mouseleave event",
@@ -8783,7 +8783,7 @@
       }
     },
     {
-      "id": "mouseleave",
+      "id": "mouseleave-shorthand",
       "type": "method",
       "name": ".mouseleave()",
       "title": ".mouseleave()",
@@ -8871,7 +8871,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "mouseenter",
       "type": "method",
       "name": "mouseenter event",
       "title": "mouseenter event",
@@ -8944,7 +8944,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "mouseenter",
       "type": "method",
       "name": "mouseenter event",
       "title": "mouseenter event",
@@ -8983,7 +8983,7 @@
       }
     },
     {
-      "id": "mouseenter",
+      "id": "mouseenter-shorthand",
       "type": "method",
       "name": ".mouseenter()",
       "title": ".mouseenter()",
@@ -9071,7 +9071,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "mousedown",
       "type": "method",
       "name": "mousedown event",
       "title": "mousedown event",
@@ -9144,7 +9144,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "mousedown",
       "type": "method",
       "name": "mousedown event",
       "title": "mousedown event",
@@ -9183,7 +9183,7 @@
       }
     },
     {
-      "id": "mousedown",
+      "id": "mousedown-shorthand",
       "type": "method",
       "name": ".mousedown()",
       "title": ".mousedown()",
@@ -9347,7 +9347,7 @@
       }
     },
     {
-      "id": "lt",
+      "id": "lt-selector",
       "type": "selector",
       "name": ":lt() Selector",
       "title": ":lt() Selector",
@@ -9538,7 +9538,7 @@
       }
     },
     {
-      "id": "load",
+      "id": "load-shorthand",
       "type": "method",
       "name": ".load()",
       "title": ".load()",
@@ -9627,7 +9627,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "load-event",
       "type": "method",
       "name": "load event",
       "title": "load event",
@@ -9706,7 +9706,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "load-event",
       "type": "method",
       "name": "load event",
       "title": "load event",
@@ -9957,7 +9957,7 @@
       }
     },
     {
-      "id": "last",
+      "id": "last-selector",
       "type": "selector",
       "name": ":last Selector",
       "title": ":last Selector",
@@ -10004,7 +10004,7 @@
       }
     },
     {
-      "id": "last-of-type",
+      "id": "last-of-type-selector",
       "type": "selector",
       "name": ":last-of-type Selector",
       "title": ":last-of-type Selector",
@@ -10040,7 +10040,7 @@
       }
     },
     {
-      "id": "last-child",
+      "id": "last-child-selector",
       "type": "selector",
       "name": ":last-child Selector",
       "title": ":last-child Selector",
@@ -10076,7 +10076,7 @@
       }
     },
     {
-      "id": "lang",
+      "id": "lang-selector",
       "type": "selector",
       "name": ":lang() Selector",
       "title": ":lang() Selector",
@@ -10121,7 +10121,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "keyup",
       "type": "method",
       "name": "keyup event",
       "title": "keyup event",
@@ -10194,7 +10194,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "keyup",
       "type": "method",
       "name": "keyup event",
       "title": "keyup event",
@@ -10233,7 +10233,7 @@
       }
     },
     {
-      "id": "keyup",
+      "id": "keyup-shorthand",
       "type": "method",
       "name": ".keyup()",
       "title": ".keyup()",
@@ -10321,7 +10321,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "keypress",
       "type": "method",
       "name": "keypress event",
       "title": "keypress event",
@@ -10394,7 +10394,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "keypress",
       "type": "method",
       "name": "keypress event",
       "title": "keypress event",
@@ -10433,7 +10433,7 @@
       }
     },
     {
-      "id": "keypress",
+      "id": "keypress-shorthand",
       "type": "method",
       "name": ".keypress()",
       "title": ".keypress()",
@@ -10521,7 +10521,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "keydown",
       "type": "method",
       "name": "keydown event",
       "title": "keydown event",
@@ -10594,7 +10594,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "keydown",
       "type": "method",
       "name": "keydown event",
       "title": "keydown event",
@@ -10633,7 +10633,7 @@
       }
     },
     {
-      "id": "keydown",
+      "id": "keydown-shorthand",
       "type": "method",
       "name": ".keydown()",
       "title": ".keydown()",
@@ -14814,7 +14814,7 @@
       }
     },
     {
-      "id": "jQuery.browser.version",
+      "id": "jQuery.browser",
       "type": "property",
       "name": "jQuery.browser.version",
       "title": "jQuery.browser.version",
@@ -15198,7 +15198,7 @@
       }
     },
     {
-      "id": "jquery",
+      "id": "jquery-2",
       "type": "property",
       "name": ".jquery",
       "title": ".jquery",
@@ -15499,7 +15499,7 @@
       }
     },
     {
-      "id": "input",
+      "id": "input-selector",
       "type": "selector",
       "name": ":input Selector",
       "title": ":input Selector",
@@ -15927,7 +15927,7 @@
       }
     },
     {
-      "id": "image",
+      "id": "image-selector",
       "type": "selector",
       "name": ":image Selector",
       "title": ":image Selector",
@@ -15973,7 +15973,7 @@
       }
     },
     {
-      "id": "id",
+      "id": "id-selector",
       "type": "selector",
       "name": "ID Selector (\"#id\")",
       "title": "ID Selector (\"#id\")",
@@ -16433,7 +16433,7 @@
       }
     },
     {
-      "id": "hidden",
+      "id": "hidden-selector",
       "type": "selector",
       "name": ":hidden Selector",
       "title": ":hidden Selector",
@@ -16632,7 +16632,7 @@
       }
     },
     {
-      "id": "header",
+      "id": "header-selector",
       "type": "selector",
       "name": ":header Selector",
       "title": ":header Selector",
@@ -16786,7 +16786,7 @@
       }
     },
     {
-      "id": "has",
+      "id": "has-selector",
       "type": "selector",
       "name": ":has() Selector",
       "title": ":has() Selector",
@@ -16841,7 +16841,7 @@
       }
     },
     {
-      "id": "attributeHas",
+      "id": "has-attribute-selector",
       "type": "selector",
       "name": "Has Attribute Selector [name]",
       "title": "Has Attribute Selector [name]",
@@ -16886,7 +16886,7 @@
       }
     },
     {
-      "id": "gt",
+      "id": "gt-selector",
       "type": "selector",
       "name": ":gt() Selector",
       "title": ":gt() Selector",
@@ -17039,7 +17039,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "focusout",
       "type": "method",
       "name": "focusout event",
       "title": "focusout event",
@@ -17114,7 +17114,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "focusout",
       "type": "method",
       "name": "focusout event",
       "title": "focusout event",
@@ -17155,7 +17155,7 @@
       }
     },
     {
-      "id": "focusout",
+      "id": "focusout-shorthand",
       "type": "method",
       "name": ".focusout()",
       "title": ".focusout()",
@@ -17244,7 +17244,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "focusin",
       "type": "method",
       "name": "focusin event",
       "title": "focusin event",
@@ -17319,7 +17319,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "focusin",
       "type": "method",
       "name": "focusin event",
       "title": "focusin event",
@@ -17360,7 +17360,7 @@
       }
     },
     {
-      "id": "focusin",
+      "id": "focusin-shorthand",
       "type": "method",
       "name": ".focusin()",
       "title": ".focusin()",
@@ -17449,7 +17449,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "focus",
       "type": "method",
       "name": "focus event",
       "title": "focus event",
@@ -17536,7 +17536,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "focus",
       "type": "method",
       "name": "focus event",
       "title": "focus event",
@@ -17576,7 +17576,7 @@
       }
     },
     {
-      "id": "focus",
+      "id": "focus-shorthand",
       "type": "method",
       "name": ".focus()",
       "title": ".focus()",
@@ -17665,7 +17665,7 @@
       }
     },
     {
-      "id": "focus",
+      "id": "focus-selector",
       "type": "selector",
       "name": ":focus Selector",
       "title": ":focus Selector",
@@ -17739,7 +17739,7 @@
       }
     },
     {
-      "id": "first",
+      "id": "first-selector",
       "type": "selector",
       "name": ":first Selector",
       "title": ":first Selector",
@@ -17794,7 +17794,7 @@
       }
     },
     {
-      "id": "first-of-type",
+      "id": "first-of-type-selector",
       "type": "selector",
       "name": ":first-of-type Selector",
       "title": ":first-of-type Selector",
@@ -17830,7 +17830,7 @@
       }
     },
     {
-      "id": "first-child",
+      "id": "first-child-selector",
       "type": "selector",
       "name": ":first-child Selector",
       "title": ":first-child Selector",
@@ -18110,7 +18110,7 @@
       }
     },
     {
-      "id": "file",
+      "id": "file-selector",
       "type": "selector",
       "name": ":file Selector",
       "title": ":file Selector",
@@ -19369,7 +19369,7 @@
       }
     },
     {
-      "id": "even",
+      "id": "even-selector",
       "type": "selector",
       "name": ":even Selector",
       "title": ":even Selector",
@@ -19424,7 +19424,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "error",
       "type": "method",
       "name": "error event",
       "title": "error event",
@@ -19497,7 +19497,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "error",
       "type": "method",
       "name": "error event",
       "title": "error event",
@@ -19536,7 +19536,7 @@
       }
     },
     {
-      "id": "error",
+      "id": "error-shorthand",
       "type": "method",
       "name": ".error()",
       "title": ".error()",
@@ -19685,7 +19685,7 @@
       }
     },
     {
-      "id": "eq",
+      "id": "eq-selector",
       "type": "selector",
       "name": ":eq() Selector",
       "title": ":eq() Selector",
@@ -19811,7 +19811,7 @@
       }
     },
     {
-      "id": "enabled",
+      "id": "enabled-selector",
       "type": "selector",
       "name": ":enabled Selector",
       "title": ":enabled Selector",
@@ -19884,7 +19884,7 @@
       }
     },
     {
-      "id": "empty",
+      "id": "empty-selector",
       "type": "selector",
       "name": ":empty Selector",
       "title": ":empty Selector",
@@ -19920,7 +19920,7 @@
       }
     },
     {
-      "id": "element",
+      "id": "element-selector",
       "type": "selector",
       "name": "Element Selector (\"element\")",
       "title": "Element Selector (\"element\")",
@@ -20042,7 +20042,7 @@
       }
     },
     {
-      "id": "disabled",
+      "id": "disabled-selector",
       "type": "selector",
       "name": ":disabled Selector",
       "title": ":disabled Selector",
@@ -20213,7 +20213,7 @@
       }
     },
     {
-      "id": "descendant",
+      "id": "descendant-selector",
       "type": "selector",
       "name": "Descendant Selector (\"ancestor descendant\")",
       "title": "Descendant Selector (\"ancestor descendant\")",
@@ -21442,7 +21442,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "dblclick",
       "type": "method",
       "name": "dblclick event",
       "title": "dblclick event",
@@ -21521,7 +21521,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "dblclick",
       "type": "method",
       "name": "dblclick event",
       "title": "dblclick event",
@@ -21560,7 +21560,7 @@
       }
     },
     {
-      "id": "dblclick",
+      "id": "dblclick-shorthand",
       "type": "method",
       "name": ".dblclick()",
       "title": ".dblclick()",
@@ -22013,7 +22013,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "contextmenu",
       "type": "method",
       "name": "contextmenu event",
       "title": "contextmenu event",
@@ -22108,7 +22108,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "contextmenu",
       "type": "method",
       "name": "contextmenu event",
       "title": "contextmenu event",
@@ -22147,7 +22147,7 @@
       }
     },
     {
-      "id": "contextmenu",
+      "id": "contextmenu-shorthand",
       "type": "method",
       "name": ".contextmenu()",
       "title": ".contextmenu()",
@@ -22319,7 +22319,7 @@
       }
     },
     {
-      "id": "contains",
+      "id": "contains-selector",
       "type": "selector",
       "name": ":contains() Selector",
       "title": ":contains() Selector",
@@ -22587,7 +22587,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "click",
       "type": "method",
       "name": "click event",
       "title": "click event",
@@ -22666,7 +22666,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "click",
       "type": "method",
       "name": "click event",
       "title": "click event",
@@ -22705,7 +22705,7 @@
       }
     },
     {
-      "id": "click",
+      "id": "click-shorthand",
       "type": "method",
       "name": ".click()",
       "title": ".click()",
@@ -22841,7 +22841,7 @@
       }
     },
     {
-      "id": "class",
+      "id": "class-selector",
       "type": "selector",
       "name": "Class Selector (\".class\")",
       "title": "Class Selector (\".class\")",
@@ -22950,7 +22950,7 @@
       }
     },
     {
-      "id": "child",
+      "id": "child-selector",
       "type": "selector",
       "name": "Child Selector (\"parent > child\")",
       "title": "Child Selector (\"parent > child\")",
@@ -23003,7 +23003,7 @@
       }
     },
     {
-      "id": "checked",
+      "id": "checked-selector",
       "type": "selector",
       "name": ":checked Selector",
       "title": ":checked Selector",
@@ -23045,7 +23045,7 @@
       }
     },
     {
-      "id": "checkbox",
+      "id": "checkbox-selector",
       "type": "selector",
       "name": ":checkbox Selector",
       "title": ":checkbox Selector",
@@ -23091,7 +23091,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "change",
       "type": "method",
       "name": "change event",
       "title": "change event",
@@ -23171,7 +23171,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "change",
       "type": "method",
       "name": "change event",
       "title": "change event",
@@ -23210,7 +23210,7 @@
       }
     },
     {
-      "id": "change",
+      "id": "change-shorthand",
       "type": "method",
       "name": ".change()",
       "title": ".change()",
@@ -23764,7 +23764,7 @@
       }
     },
     {
-      "id": "button",
+      "id": "button-selector",
       "type": "selector",
       "name": ":button Selector",
       "title": ":button Selector",
@@ -23810,7 +23810,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "blur",
       "type": "method",
       "name": "blur event",
       "title": "blur event",
@@ -23885,7 +23885,7 @@
       }
     },
     {
-      "id": "trigger",
+      "id": "blur",
       "type": "method",
       "name": "blur event",
       "title": "blur event",
@@ -23925,7 +23925,7 @@
       }
     },
     {
-      "id": "blur",
+      "id": "blur-shorthand",
       "type": "method",
       "name": ".blur()",
       "title": ".blur()",
@@ -24341,7 +24341,7 @@
       }
     },
     {
-      "id": "attributeStartsWith",
+      "id": "attribute-starts-with-selector",
       "type": "selector",
       "name": "Attribute Starts With Selector [name^=\"value\"]",
       "title": "Attribute Starts With Selector [name^=\"value\"]",
@@ -24394,7 +24394,7 @@
       }
     },
     {
-      "id": "attributeNotEqual",
+      "id": "attribute-not-equal-selector",
       "type": "selector",
       "name": "Attribute Not Equal Selector [name!=\"value\"]",
       "title": "Attribute Not Equal Selector [name!=\"value\"]",
@@ -24457,7 +24457,7 @@
       }
     },
     {
-      "id": "attributeEquals",
+      "id": "attribute-equals-selector",
       "type": "selector",
       "name": "Attribute Equals Selector [name=\"value\"]",
       "title": "Attribute Equals Selector [name=\"value\"]",
@@ -24510,7 +24510,7 @@
       }
     },
     {
-      "id": "attributeEndsWith",
+      "id": "attribute-ends-with-selector",
       "type": "selector",
       "name": "Attribute Ends With Selector [name$=\"value\"]",
       "title": "Attribute Ends With Selector [name$=\"value\"]",
@@ -24563,7 +24563,7 @@
       }
     },
     {
-      "id": "attributeContainsWord",
+      "id": "attribute-contains-word-selector",
       "type": "selector",
       "name": "Attribute Contains Word Selector [name~=\"value\"]",
       "title": "Attribute Contains Word Selector [name~=\"value\"]",
@@ -24616,7 +24616,7 @@
       }
     },
     {
-      "id": "attributeContains",
+      "id": "attribute-contains-selector",
       "type": "selector",
       "name": "Attribute Contains Selector [name*=\"value\"]",
       "title": "Attribute Contains Selector [name*=\"value\"]",
@@ -24669,7 +24669,7 @@
       }
     },
     {
-      "id": "attributeContainsPrefix",
+      "id": "attribute-contains-prefix-selector",
       "type": "selector",
       "name": "Attribute Contains Prefix Selector [name|=\"value\"]",
       "title": "Attribute Contains Prefix Selector [name|=\"value\"]",
@@ -25110,7 +25110,7 @@
       }
     },
     {
-      "id": "animated",
+      "id": "animated-selector",
       "type": "selector",
       "name": ":animated Selector",
       "title": ":animated Selector",
@@ -25349,7 +25349,7 @@
       }
     },
     {
-      "id": "all",
+      "id": "all-selector",
       "type": "selector",
       "name": "All Selector (\"*\")",
       "title": "All Selector (\"*\")",
@@ -25391,7 +25391,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "ajaxSuccess",
       "type": "method",
       "name": "ajaxSuccess event",
       "title": "ajaxSuccess event",
@@ -25497,7 +25497,7 @@
       }
     },
     {
-      "id": "ajaxSuccess",
+      "id": "ajaxSuccess-shorthand",
       "type": "method",
       "name": ".ajaxSuccess()",
       "title": ".ajaxSuccess()",
@@ -25537,7 +25537,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "ajaxStop",
       "type": "method",
       "name": "ajaxStop event",
       "title": "ajaxStop event",
@@ -25609,7 +25609,7 @@
       }
     },
     {
-      "id": "ajaxStop",
+      "id": "ajaxStop-shorthand",
       "type": "method",
       "name": ".ajaxStop()",
       "title": ".ajaxStop()",
@@ -25649,7 +25649,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "ajaxStart",
       "type": "method",
       "name": "ajaxStart event",
       "title": "ajaxStart event",
@@ -25721,7 +25721,7 @@
       }
     },
     {
-      "id": "ajaxStart",
+      "id": "ajaxStart-shorthand",
       "type": "method",
       "name": ".ajaxStart()",
       "title": ".ajaxStart()",
@@ -25761,7 +25761,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "ajaxSend",
       "type": "method",
       "name": "ajaxSend event",
       "title": "ajaxSend event",
@@ -25859,7 +25859,7 @@
       }
     },
     {
-      "id": "ajaxSend",
+      "id": "ajaxSend-shorthand",
       "type": "method",
       "name": ".ajaxSend()",
       "title": ".ajaxSend()",
@@ -25899,7 +25899,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "ajaxError",
       "type": "method",
       "name": "ajaxError event",
       "title": "ajaxError event",
@@ -26005,7 +26005,7 @@
       }
     },
     {
-      "id": "ajaxError",
+      "id": "ajaxError-shorthand",
       "type": "method",
       "name": ".ajaxError()",
       "title": ".ajaxError()",
@@ -26045,7 +26045,7 @@
       }
     },
     {
-      "id": "on",
+      "id": "ajaxComplete",
       "type": "method",
       "name": "ajaxComplete event",
       "title": "ajaxComplete event",
@@ -26143,7 +26143,7 @@
       }
     },
     {
-      "id": "ajaxComplete",
+      "id": "ajaxComplete-shorthand",
       "type": "method",
       "name": ".ajaxComplete()",
       "title": ".ajaxComplete()",
@@ -27838,36 +27838,36 @@
       "css"
     ],
     "selectors/jquery-selector-extensions": [
-      "visible",
-      "text",
-      "submit",
-      "selected",
-      "reset",
-      "radio",
-      "password",
-      "parent",
-      "odd",
-      "lt",
-      "last",
-      "input",
-      "image",
-      "hidden",
-      "header",
-      "has",
-      "gt",
-      "first",
-      "file",
-      "even",
-      "eq",
-      "contains",
-      "checkbox",
-      "button",
-      "attributeNotEqual",
-      "animated"
+      "visible-selector",
+      "text-selector",
+      "submit-selector",
+      "selected-selector",
+      "reset-selector",
+      "radio-selector",
+      "password-selector",
+      "parent-selector",
+      "odd-selector",
+      "lt-selector",
+      "last-selector",
+      "input-selector",
+      "image-selector",
+      "hidden-selector",
+      "header-selector",
+      "has-selector",
+      "gt-selector",
+      "first-selector",
+      "file-selector",
+      "even-selector",
+      "eq-selector",
+      "contains-selector",
+      "checkbox-selector",
+      "button-selector",
+      "attribute-not-equal-selector",
+      "animated-selector"
     ],
     "selectors/visibility-filter-selectors": [
-      "visible",
-      "hidden"
+      "visible-selector",
+      "hidden-selector"
     ],
     "attributes": [
       "val",
@@ -27889,24 +27889,24 @@
     "forms": [
       "val",
       "val",
-      "on",
+      "submit",
       "serializeArray",
       "serialize",
-      "on",
+      "select",
       "jQuery.param",
-      "on",
-      "trigger",
       "focusout",
-      "on",
-      "trigger",
+      "focusout",
+      "focusout-shorthand",
       "focusin",
-      "on",
-      "trigger",
+      "focusin",
+      "focusin-shorthand",
       "focus",
-      "on",
-      "on",
-      "trigger",
-      "blur"
+      "focus",
+      "focus-shorthand",
+      "change",
+      "blur",
+      "blur",
+      "blur-shorthand"
     ],
     "manipulation/general-attributes": [
       "val",
@@ -27925,13 +27925,13 @@
       "detach"
     ],
     "events/document-loading": [
-      "on",
-      "trigger",
       "unload",
+      "unload",
+      "unload-shorthand",
       "ready",
-      "load",
-      "on",
-      "trigger",
+      "load-shorthand",
+      "load-event",
+      "load-event",
       "jQuery.ready",
       "jQuery.holdReady"
     ],
@@ -27974,7 +27974,7 @@
       "jQuery.data",
       "jQuery.contains",
       "jQuery.browser",
-      "jQuery.browser.version",
+      "jQuery.browser",
       "jQuery.boxModel",
       "dequeue",
       "clearQueue"
@@ -28006,39 +28006,39 @@
       "hide"
     ],
     "events/mouse-events": [
-      "toggle",
-      "on",
-      "trigger",
+      "toggle-event",
       "mouseup",
-      "on",
-      "trigger",
+      "mouseup",
+      "mouseup-shorthand",
       "mouseover",
-      "on",
-      "trigger",
+      "mouseover",
+      "mouseover-shorthand",
       "mouseout",
-      "on",
-      "trigger",
+      "mouseout",
+      "mouseout-shorthand",
       "mousemove",
-      "on",
-      "trigger",
+      "mousemove",
+      "mousemove-shorthand",
       "mouseleave",
-      "on",
-      "trigger",
+      "mouseleave",
+      "mouseleave-shorthand",
       "mouseenter",
-      "on",
-      "trigger",
+      "mouseenter",
+      "mouseenter-shorthand",
       "mousedown",
+      "mousedown",
+      "mousedown-shorthand",
       "hover",
       "hover",
-      "on",
-      "trigger",
       "dblclick",
-      "on",
-      "trigger",
+      "dblclick",
+      "dblclick-shorthand",
       "contextmenu",
-      "on",
-      "trigger",
-      "click"
+      "contextmenu",
+      "contextmenu-shorthand",
+      "click",
+      "click",
+      "click-shorthand"
     ],
     "miscellaneous/dom-element-methods": [
       "toArray",
@@ -28058,60 +28058,60 @@
       "append"
     ],
     "selectors/form-selectors": [
-      "text",
-      "submit",
-      "selected",
-      "reset",
-      "radio",
-      "password",
-      "input",
-      "image",
-      "focus",
-      "file",
-      "enabled",
-      "disabled",
-      "checked",
-      "checkbox",
-      "button"
+      "text-selector",
+      "submit-selector",
+      "selected-selector",
+      "reset-selector",
+      "radio-selector",
+      "password-selector",
+      "input-selector",
+      "image-selector",
+      "focus-selector",
+      "file-selector",
+      "enabled-selector",
+      "disabled-selector",
+      "checked-selector",
+      "checkbox-selector",
+      "button-selector"
     ],
     "selectors/basic-filter-selectors": [
-      "target",
-      "root",
-      "odd",
-      "not",
-      "lt",
-      "last",
-      "lang",
-      "header",
-      "gt",
-      "focus",
-      "first",
-      "even",
-      "eq",
-      "animated"
+      "target-selector",
+      "root-selector",
+      "odd-selector",
+      "not-selector",
+      "lt-selector",
+      "last-selector",
+      "lang-selector",
+      "header-selector",
+      "gt-selector",
+      "focus-selector",
+      "first-selector",
+      "even-selector",
+      "eq-selector",
+      "animated-selector"
     ],
     "events/form-events": [
-      "on",
-      "trigger",
       "submit",
-      "on",
-      "trigger",
+      "submit",
+      "submit-shorthand",
       "select",
-      "on",
-      "trigger",
+      "select",
+      "select-shorthand",
       "focusout",
-      "on",
-      "trigger",
+      "focusout",
+      "focusout-shorthand",
       "focusin",
-      "on",
-      "trigger",
+      "focusin",
+      "focusin-shorthand",
       "focus",
-      "on",
-      "trigger",
+      "focus",
+      "focus-shorthand",
       "change",
-      "on",
-      "trigger",
-      "blur"
+      "change",
+      "change-shorthand",
+      "blur",
+      "blur",
+      "blur-shorthand"
     ],
     "effects/custom-effects": [
       "stop",
@@ -28170,13 +28170,13 @@
       "selector",
       "pushStack",
       "jQuery.error",
-      "jquery",
+      "jquery-2",
       "context"
     ],
     "properties/jquery-object-instance-properties": [
       "selector",
       "length",
-      "jquery",
+      "jquery-2",
       "context"
     ],
     "offset": [
@@ -28190,15 +28190,15 @@
       "offset"
     ],
     "events/browser-events": [
-      "on",
-      "trigger",
       "scroll",
-      "on",
-      "trigger",
+      "scroll",
+      "scroll-shorthand",
       "resize",
-      "on",
-      "trigger",
-      "error"
+      "resize",
+      "resize-shorthand",
+      "error",
+      "error",
+      "error-shorthand"
     ],
     "manipulation/dom-replacement": [
       "replaceWith",
@@ -28251,22 +28251,22 @@
       "deferred.always"
     ],
     "selectors/content-filter-selector": [
-      "parent",
-      "has",
-      "empty",
-      "contains"
+      "parent-selector",
+      "has-selector",
+      "empty-selector",
+      "contains-selector"
     ],
     "selectors/child-filter-selectors": [
-      "only-of-type",
-      "only-child",
-      "nth-of-type",
-      "nth-last-of-type",
-      "nth-last-child",
-      "nth-child",
-      "last-of-type",
-      "last-child",
-      "first-of-type",
-      "first-child"
+      "only-of-type-selector",
+      "only-child-selector",
+      "nth-of-type-selector",
+      "nth-last-of-type-selector",
+      "nth-last-child-selector",
+      "nth-child-selector",
+      "last-of-type-selector",
+      "last-child-selector",
+      "first-of-type-selector",
+      "first-child-selector"
     ],
     "traversing/miscellaneous-traversal": [
       "not",
@@ -28277,28 +28277,28 @@
       "add"
     ],
     "selectors/hierarchy-selectors": [
-      "next siblings",
-      "next adjacent",
-      "descendant",
-      "child"
+      "next-siblings-selector",
+      "next-adjacent-selector",
+      "descendant-selector",
+      "child-selector"
     ],
     "selectors/basic-css-selectors": [
-      "multiple",
-      "id",
-      "element",
-      "class",
-      "all"
+      "multiple-selector",
+      "id-selector",
+      "element-selector",
+      "class-selector",
+      "all-selector"
     ],
     "selectors/attribute-selectors": [
-      "attributeMultiple",
-      "attributeHas",
-      "attributeStartsWith",
-      "attributeNotEqual",
-      "attributeEquals",
-      "attributeEndsWith",
-      "attributeContainsWord",
-      "attributeContains",
-      "attributeContainsPrefix"
+      "multiple-attribute-selector",
+      "has-attribute-selector",
+      "attribute-starts-with-selector",
+      "attribute-not-equal-selector",
+      "attribute-equals-selector",
+      "attribute-ends-with-selector",
+      "attribute-contains-word-selector",
+      "attribute-contains-selector",
+      "attribute-contains-prefix-selector"
     ],
     "ajax/shorthand-methods": [
       "load",
@@ -28308,15 +28308,15 @@
       "jQuery.get"
     ],
     "events/keyboard-events": [
-      "on",
-      "trigger",
       "keyup",
-      "on",
-      "trigger",
+      "keyup",
+      "keyup-shorthand",
       "keypress",
-      "on",
-      "trigger",
-      "keydown"
+      "keypress",
+      "keypress-shorthand",
+      "keydown",
+      "keydown",
+      "keydown-shorthand"
     ],
     "core": [
       "jQuery",
@@ -28336,7 +28336,7 @@
       "jQuery.fx.off",
       "jQuery.fx.interval",
       "jQuery.browser",
-      "jQuery.browser.version"
+      "jQuery.browser"
     ],
     "miscellaneous/collection-manipulation": [
       "jQuery.param",
@@ -28414,18 +28414,18 @@
       "clone"
     ],
     "ajax/global-ajax-event-handlers": [
-      "on",
       "ajaxSuccess",
-      "on",
+      "ajaxSuccess-shorthand",
       "ajaxStop",
-      "on",
+      "ajaxStop-shorthand",
       "ajaxStart",
-      "on",
+      "ajaxStart-shorthand",
       "ajaxSend",
-      "on",
+      "ajaxSend-shorthand",
       "ajaxError",
-      "on",
-      "ajaxComplete"
+      "ajaxError-shorthand",
+      "ajaxComplete",
+      "ajaxComplete-shorthand"
     ]
   },
   "notes": {

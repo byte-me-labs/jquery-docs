@@ -1,9 +1,20 @@
 <%
 /**
- * Render navigation sidebar from category tree + entry mapping.
- * Expects: { categories, categoryEntries, entries, currentId }
+ * Navigation sidebar with version filter.
+ * Expects: { categories, categoryEntries, entries, currentId, linkPrefix }
  */
-function renderTree(cat, entriesMap, allEntries, currentId, depth) {
+
+function parseVer(v) {
+  if (!v) return 0;
+  var clean = String(v).replace(/-and-.*$/, '');
+  var parts = clean.split('.');
+  var maj = parseInt(parts[0], 10) || 0;
+  var min = parseInt(parts[1], 10) || 0;
+  return maj * 1000000 + min * 1000 + (parseInt(parts[2], 10) || 0);
+}
+
+function renderTree(cat, entriesMap, allEntries, currentId, depth, seen) {
+  if (!seen) seen = {};
   var slug = cat.slug;
   var catEntries = entriesMap[slug] || [];
   var hasChildren = (cat.children && cat.children.length > 0);
@@ -11,7 +22,6 @@ function renderTree(cat, entriesMap, allEntries, currentId, depth) {
   var html = '';
 
   if (depth === 0) {
-    // Top-level: collapsible section
     html += '<div class="nav-category">';
     html += '<h3 class="nav-cat-title" data-slug="' + slug + '">' + cat.name + '</h3>';
     html += '<ul class="nav-cat-list" id="nav-' + slug + '">';
@@ -21,24 +31,45 @@ function renderTree(cat, entriesMap, allEntries, currentId, depth) {
     html += '<ul>';
   }
 
-  // Render entries in this category
+  function navVerLabel(entry) {
+    var added = entry.versions.added || '1.0';
+    function f(v) { var c=String(v).replace(/-and-.*$/,''); var p=c.split('.'); return p[0]+'.'+(p[1]||'0'); }
+    var from1 = (String(added).indexOf('1.0') === 0);
+    if (entry.versions.removed) {
+      var r = f(entry.versions.removed);
+      return '<span class="nav-ver nav-ver-removed">' + (from1 ? r + '-' : added + '+ ' + r + '-') + '</span>';
+    }
+    if (entry.versions.deprecated) {
+      var d = f(entry.versions.deprecated);
+      return '<span class="nav-ver nav-ver-deprecated">' + (from1 ? d + '-' : added + '+ ' + d + '-') + '</span>';
+    }
+    if (from1) return '';
+    return '<span class="nav-ver nav-ver-active">' + added + '+</span>';
+  }
+
+  // Render children (sub-categories) before direct entries
+  if (cat.children) {
+    for (var j = 0; j < cat.children.length; j++) {
+      html += renderTree(cat.children[j], entriesMap, allEntries, currentId, depth + 1, seen);
+    }
+  }
+
   for (var i = 0; i < catEntries.length; i++) {
     var entryId = catEntries[i];
+    if (seen[entryId]) continue;
+    seen[entryId] = true;
     var entry = allEntries.filter(function(e) { return e.id === entryId; })[0];
-    if (!entry) continue;
+    if (!entry || !entry.title) continue;
     var isActive = (currentId === entryId);
     var cls = isActive ? 'nav-link active' : 'nav-link';
     var statusCls = '';
-    if (entry.removed) statusCls = ' status-removed';
-    else if (entry.deprecated) statusCls = ' status-deprecated';
-    html += '<li><a class="' + cls + statusCls + '" href="api/' + entryId + '.html">' + entry.title + '</a></li>';
-  }
-
-  // Render children
-  if (cat.children) {
-    for (var j = 0; j < cat.children.length; j++) {
-      html += renderTree(cat.children[j], entriesMap, allEntries, currentId, depth + 1);
-    }
+    if (entry.versions.removed) statusCls = ' status-removed';
+    else if (entry.versions.deprecated) statusCls = ' status-deprecated';
+    html += '<li><a class="' + cls + statusCls + '" href="' + (linkPrefix||'') + 'api/' + entryId + '.html"'
+      + ' data-added="' + (entry.versions.added || '1.0') + '"'
+      + (entry.versions.removed ? ' data-removed="' + entry.versions.removed + '"' : '')
+      + (entry.versions.deprecated ? ' data-deprecated="' + entry.versions.deprecated + '"' : '')
+      + '>' + entry.title + ' ' + navVerLabel(entry) + '</a></li>';
   }
 
   if (depth === 0) {
@@ -50,48 +81,136 @@ function renderTree(cat, entriesMap, allEntries, currentId, depth) {
   return html;
 }
 
-// categories may be the tree root or displayCategories array — normalize
 var catsList = Array.isArray(categories) ? categories : (categories.children || []);
 var displayCats = catsList.filter(function(c) {
   return c.slug !== 'version' && c.slug !== 'deprecated' && c.slug !== 'removed' && c.slug !== 'uncategorized';
 });
 
-var sidebarHTML = '';
-sidebarHTML += '<div class="nav-search"><input type="text" id="nav-search" placeholder="Filter APIs..."></div>';
+// Sort by entry count descending — matches cheatsheet order
+function sidebarTotal(node) {
+  var n = (categoryEntries[node.slug] || []).length;
+  if (node.children) node.children.forEach(function(ch) { n += sidebarTotal(ch); });
+  return n;
+}
+displayCats.sort(function(a, b) {
+  return sidebarTotal(b) - sidebarTotal(a);
+});
 
-for (var i = 0; i < displayCats.length; i++) {
-  sidebarHTML += renderTree(displayCats[i], categoryEntries, entries, currentId, 0);
+// Build version range options (same logic as cheatsheet)
+var breakpoints = {};
+for (var i = 0; i < entries.length; i++) {
+  var ev = entries[i].versions;
+  if (ev.deprecated) breakpoints[ev.deprecated] = true;
+  if (ev.removed) breakpoints[ev.removed] = true;
+}
+var bpList = Object.keys(breakpoints).sort(function(a, b) { return parseVer(a) - parseVer(b); });
+var majors = {};
+for (var bi = 0; bi < bpList.length; bi++) {
+  var clean = String(bpList[bi]).replace(/-and-.*$/, '');
+  var parts = clean.split('.');
+  majors[parts[0] + '.' + (parts[1] || '0')] = true;
+}
+var verList = Object.keys(majors).sort(function(a, b) { return parseVer(a) - parseVer(b); });
+function prevMinor(v) {
+  var parts = String(v).split('.');
+  var maj = parseInt(parts[0], 10);
+  var min = parseInt(parts[1] || 0, 10);
+  if (min === 0) return (maj - 1) + '.x';
+  return maj + '.' + (min - 1) + '.x';
 }
 
-// Add cheatsheet link
+var sidebarHTML = '';
+sidebarHTML += '<div class="nav-version">';
+sidebarHTML += '<select id="nav-version">';
+sidebarHTML += '<option value="" data-from="" data-to="">All Versions</option>';
+for (var ri = 0; ri < verList.length; ri++) {
+  var from = verList[ri];
+  var to = (ri + 1 < verList.length) ? verList[ri + 1] : '';
+  var label = to ? (from + '.0 – ' + prevMinor(to)) : ('≥ ' + from + '.0');
+  sidebarHTML += '<option value="' + from + '" data-from="' + from + '" data-to="' + to + '">' + label + '</option>';
+}
+sidebarHTML += '</select></div>';
+
+sidebarHTML += '<div class="nav-search"><input type="text" id="nav-search" placeholder="Filter APIs..."></div>';
+
+var sidebarSeen = {};
+for (var i = 0; i < displayCats.length; i++) {
+  sidebarHTML += renderTree(displayCats[i], categoryEntries, entries, currentId, 0, sidebarSeen);
+}
+
 sidebarHTML += '<div class="nav-category"><ul class="nav-cat-list">';
-sidebarHTML += '<li><a class="nav-link nav-cheatsheet" href="cheatsheet.html">Cheatsheet</a></li>';
+sidebarHTML += '<li><a class="nav-link nav-cheatsheet" href="' + (linkPrefix||'') + 'cheatsheet.html">Cheatsheet</a></li>';
 sidebarHTML += '</ul></div>';
 %>
 <%- sidebarHTML %>
 <script>
 (function() {
   var searchInput = document.getElementById('nav-search');
-  if (!searchInput) return;
-  searchInput.addEventListener('input', function() {
-    var q = this.value.toLowerCase();
+  var versionSelect = document.getElementById('nav-version');
+
+  function parseVer(v) {
+    if (!v) return 0;
+    var clean = String(v).replace(/-and-.*$/, '');
+    var parts = clean.split('.');
+    return parseInt(parts[0], 10) * 1000000 + parseInt(parts[1] || 0, 10) * 1000 + (parseInt(parts[2], 10) || 0);
+  }
+
+  function versionMatch(el, fromVal, toVal) {
+    if (!fromVal) return true;
+    var added = parseVer(el.getAttribute('data-added') || '1.0');
+    var removed = el.getAttribute('data-removed');
+    var fv = parseVer(fromVal);
+    var tv = toVal ? parseVer(toVal) : 999999999;
+    if (added >= tv) return false;
+    if (removed && parseVer(removed) <= fv) return false;
+    return true;
+  }
+
+  function updateSidebar() {
+    var q = (searchInput && searchInput.value || '').toLowerCase().trim();
+    var opt = versionSelect && versionSelect.selectedOptions[0];
+    var fv = opt ? opt.getAttribute('data-from') : '';
+    var tv = opt ? opt.getAttribute('data-to') : '';
     var links = document.querySelectorAll('#sidebar .nav-link');
-    links.forEach(function(link) {
+    for (var i = 0; i < links.length; i++) {
+      var link = links[i];
       var text = link.textContent.toLowerCase();
       var li = link.parentElement;
-      if (!q || text.indexOf(q) !== -1) {
-        li.style.display = '';
+      var textMatch = !q || text.indexOf(q) !== -1;
+      var verMatch = versionMatch(link, fv, tv);
+      var match = textMatch && verMatch;
+      li.style.display = match ? '' : 'none';
+    }
+
+    var cats = document.querySelectorAll('#sidebar .nav-category');
+    for (var j = 0; j < cats.length; j++) {
+      var cat = cats[j];
+      var visible = cat.querySelectorAll('.nav-link:not([style*="display: none"])').length > 0;
+      cat.style.display = (q && !visible) ? 'none' : '';
+    }
+
+    // Dispatch for cheatsheet to pick up
+    if (versionSelect) {
+      var evt = document.createEvent('Event');
+      evt.initEvent('versionchange', true, true);
+      document.dispatchEvent(evt);
+    }
+  }
+
+  if (searchInput) searchInput.addEventListener('input', updateSidebar);
+  if (versionSelect) versionSelect.addEventListener('change', updateSidebar);
+
+  // Category collapse toggle
+  var titles = document.querySelectorAll('#sidebar .nav-cat-title');
+  for (var i = 0; i < titles.length; i++) {
+    titles[i].addEventListener('click', function() {
+      var collapsed = this.className.indexOf('collapsed') !== -1;
+      if (collapsed) {
+        this.className = this.className.replace(' collapsed', '');
       } else {
-        li.style.display = 'none';
+        this.className += ' collapsed';
       }
     });
-    // Show/hide categories based on whether they have visible children
-    var cats = document.querySelectorAll('#sidebar .nav-category');
-    cats.forEach(function(cat) {
-      var visible = cat.querySelectorAll('.nav-link:not([style*="display: none"])').length > 0 ||
-                    cat.querySelectorAll('li[style=""] .nav-link').length > 0;
-      cat.style.display = (q && !visible) ? 'none' : '';
-    });
-  });
+  }
 })();
 </script>

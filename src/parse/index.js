@@ -41,8 +41,11 @@ function parseEntry(entryNode, categories, fileSlug) {
   // Fallback: derive display name from type + name when title is missing
   const displayName = rawTitle || formatAPIName(entryNode);
 
+  // Use file slug as primary id (not entry name — event files have name="on"/"trigger")
+  const entryId = fileSlug || rawName;
+
   const entry = {
-    id: rawName,
+    id: entryId,
     type: type,
     name: displayName,
     title: rawTitle || displayName,

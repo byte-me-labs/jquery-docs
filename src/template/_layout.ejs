@@ -4,19 +4,39 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title %> — jQuery API Documentation</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="<%= cssPath || 'assets/' %>style.css">
 </head>
 <body>
-<div id="layout">
+<div id="layout" class="layout-has-sidebar">
   <nav id="sidebar">
     <div class="sidebar-header">
       <h2><a href="index.html">jQuery API</a></h2>
     </div>
-    <%- sidebar %>
+    <div id="sidebar-inner">
+      <%- sidebar %>
+    </div>
   </nav>
   <main id="content">
     <%- content %>
   </main>
 </div>
+<script>
+// Detect CHM environment: mk:@MSITStore protocol or IE + window.external
+(function() {
+  var isCHM = false;
+  try {
+    isCHM = (location.protocol || '').indexOf('mk:') === 0;
+  } catch(e) {}
+  if (!isCHM) {
+    try { isCHM = !!(window.external && window.external.AddFavorite); } catch(e) {}
+  }
+  if (isCHM) {
+    var layout = document.getElementById('layout');
+    if (layout) layout.className = 'layout-chm';
+    var sidebar = document.getElementById('sidebar');
+    if (sidebar) sidebar.style.display = 'none';
+  }
+})();
+</script>
 </body>
 </html>
