@@ -1,0 +1,152 @@
+<%
+/**
+ * API detail page template
+ * Expects: entry, notes (lookup), layout, sidebar
+ */
+
+// Version status badge
+function versionBadge(entry) {
+  var html = '<span class="version-badges">';
+  if (entry.removed) {
+    html += '<span class="badge badge-removed" title="Removed in jQuery ' + entry.removed + '">✖ Removed ' + entry.removed + '</span>';
+  } else if (entry.deprecated) {
+    html += '<span class="badge badge-deprecated" title="Deprecated since jQuery ' + entry.deprecated + '">⚠ Deprecated ' + entry.deprecated + '</span>';
+  } else {
+    html += '<span class="badge badge-active" title="Available since jQuery ' + (entry.versions.added || '1.0') + '">✔ ' + (entry.versions.added || '1.0') + '+</span>';
+  }
+  html += '<span class="badge badge-type">' + entry.type + '</span>';
+  html += '</span>';
+  return html;
+}
+
+// Render arguments list
+function renderArgs(args) {
+  if (!args || args.length === 0) return '';
+  var parts = [];
+  for (var i = 0; i < args.length; i++) {
+    var arg = args[i];
+    var str = arg.name;
+    if (arg.optional) str = '[' + str + ']';
+    parts.push(str);
+  }
+  return parts.join(', ');
+}
+
+// Render parameter table
+function renderParamTable(args) {
+  if (!args || args.length === 0) return '';
+  var html = '<table class="param-table"><thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead><tbody>';
+  for (var i = 0; i < args.length; i++) {
+    var arg = args[i];
+    var opt = arg.optional ? ' <em>(optional)</em>' : '';
+    html += '<tr>';
+    html += '<td><code>' + arg.name + '</code>' + opt + '</td>';
+    html += '<td><code>' + (arg.type || 'Any') + '</code></td>';
+    html += '<td>' + (arg.desc || '') + '</td>';
+    html += '</tr>';
+    // Nested arguments (callback params)
+    if (arg.arguments) {
+      html += '<tr class="param-nested"><td colspan="3"><strong>Callback parameters:</strong>' + renderParamTable(arg.arguments) + '</td></tr>';
+    }
+  }
+  html += '</tbody></table>';
+  return html;
+}
+
+// Render notes
+function renderNotes(entryNotes, notesLookup) {
+  if (!entryNotes || entryNotes.length === 0 || !notesLookup) return '';
+  var html = '<div class="notes-section"><h3>Additional Notes</h3>';
+  for (var i = 0; i < entryNotes.length; i++) {
+    var note = entryNotes[i];
+    var template = notesLookup[note.id];
+    if (!template) continue;
+    var rendered = template
+      .replace(/\{\{data-title\}\}/g, note.dataTitle || entry.title)
+      .replace(/\{\{data-selector\}\}/g, note.dataSelector || '')
+      .replace(/\{\{data-parameters\}\}/g, note.dataParameters || '')
+      .replace(/\{\{data-alt\}\}/g, note.dataAlt || '');
+    html += '<div class="note note-' + (note.type || 'info') + '">' + rendered + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+%>
+<div class="api-page">
+  <header class="api-header">
+    <h1><%= entry.title %></h1>
+    <%- versionBadge(entry) %>
+    <% if (entry.return && entry.type !== 'selector') { %>
+      <span class="return-type">Returns: <code><%= entry.return %></code></span>
+    <% } %>
+  </header>
+
+  <section class="api-desc">
+    <p><%= entry.desc %></p>
+  </section>
+
+  <% if (entry.signatures && entry.signatures.length > 0) { %>
+  <section class="api-signatures">
+    <h2>Signatures</h2>
+    <% for (var i = 0; i < entry.signatures.length; i++) {
+      var sig = entry.signatures[i];
+      var sigAdded = sig.added || entry.versions.added;
+      var sigRemoved = sig.removed || null;
+    %>
+    <div class="signature-block <%= sigRemoved ? 'signature-removed' : '' %>">
+      <div class="signature-header">
+        <span class="sig-version"><%= sigAdded %></span>
+        <% if (sigRemoved) { %><span class="sig-removed">removed <%= sigRemoved %></span><% } %>
+      </div>
+      <div class="signature-code">
+        <code><%= entry.title %>(<%- renderArgs(sig.arguments) %>)</code>
+      </div>
+      <% if (sig.arguments && sig.arguments.length > 0) { %>
+        <%- renderParamTable(sig.arguments) %>
+      <% } %>
+    </div>
+    <% } %>
+  </section>
+  <% } %>
+
+  <% if (entry.sample) { %>
+  <section class="api-sample">
+    <h2>Sample</h2>
+    <code><%= entry.sample %></code>
+  </section>
+  <% } %>
+
+  <% if (entry.longdesc) { %>
+  <section class="api-longdesc">
+    <h2>Description</h2>
+    <div class="longdesc-content">
+      <%- entry.longdesc %>
+    </div>
+  </section>
+  <% } %>
+
+  <%- renderNotes(entry.notes, notes) %>
+
+  <% if (entry.examples && entry.examples.length > 0) { %>
+  <section class="api-examples">
+    <h2>Examples</h2>
+    <% for (var i = 0; i < entry.examples.length; i++) {
+      var ex = entry.examples[i];
+    %>
+    <div class="example-block">
+      <h3>Example <%= i + 1 %>: <%= ex.desc %></h3>
+      <% if (ex.html) { %>
+        <h4>HTML</h4>
+        <pre><code><%- he.encode(ex.html, {useNamedReferences: true}) %></code></pre>
+      <% } %>
+      <h4>jQuery</h4>
+      <pre><code><%- he.encode(ex.code, {useNamedReferences: true}) %></code></pre>
+      <% if (ex.css) { %>
+        <h4>CSS</h4>
+        <pre><code><%- he.encode(ex.css, {useNamedReferences: true}) %></code></pre>
+      <% } %>
+    </div>
+    <% } %>
+  </section>
+  <% } %>
+</div>

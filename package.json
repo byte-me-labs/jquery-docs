@@ -1,0 +1,20 @@
+{
+  "name": "jquery-docs",
+  "version": "1.0.0",
+  "description": "Automated jQuery API documentation CHM generator with cheatsheet and version tracking",
+  "private": true,
+  "scripts": {
+    "parse": "node scripts/parse.js",
+    "generate": "node scripts/generate.js",
+    "build": "node scripts/build.js",
+    "chm:compile": "node scripts/chm-compile.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "fast-xml-parser": "^4.5.0",
+    "fs-extra": "^11.2.0",
+    "glob": "^11.0.0",
+    "he": "^1.2.0",
+    "highlight.js": "^11.10.0"
+  }
+}

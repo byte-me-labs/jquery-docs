@@ -1,0 +1,97 @@
+<%
+/**
+ * Render navigation sidebar from category tree + entry mapping.
+ * Expects: { categories, categoryEntries, entries, currentId }
+ */
+function renderTree(cat, entriesMap, allEntries, currentId, depth) {
+  var slug = cat.slug;
+  var catEntries = entriesMap[slug] || [];
+  var hasChildren = (cat.children && cat.children.length > 0);
+  var hasEntries = catEntries.length > 0;
+  var html = '';
+
+  if (depth === 0) {
+    // Top-level: collapsible section
+    html += '<div class="nav-category">';
+    html += '<h3 class="nav-cat-title" data-slug="' + slug + '">' + cat.name + '</h3>';
+    html += '<ul class="nav-cat-list" id="nav-' + slug + '">';
+  } else if (hasChildren || hasEntries) {
+    html += '<li class="nav-subcat">';
+    html += '<h4 class="nav-subcat-title">' + cat.name + '</h4>';
+    html += '<ul>';
+  }
+
+  // Render entries in this category
+  for (var i = 0; i < catEntries.length; i++) {
+    var entryId = catEntries[i];
+    var entry = allEntries.filter(function(e) { return e.id === entryId; })[0];
+    if (!entry) continue;
+    var isActive = (currentId === entryId);
+    var cls = isActive ? 'nav-link active' : 'nav-link';
+    var statusCls = '';
+    if (entry.removed) statusCls = ' status-removed';
+    else if (entry.deprecated) statusCls = ' status-deprecated';
+    html += '<li><a class="' + cls + statusCls + '" href="api/' + entryId + '.html">' + entry.title + '</a></li>';
+  }
+
+  // Render children
+  if (cat.children) {
+    for (var j = 0; j < cat.children.length; j++) {
+      html += renderTree(cat.children[j], entriesMap, allEntries, currentId, depth + 1);
+    }
+  }
+
+  if (depth === 0) {
+    html += '</ul></div>';
+  } else if (hasChildren || hasEntries) {
+    html += '</ul></li>';
+  }
+
+  return html;
+}
+
+// categories may be the tree root or displayCategories array — normalize
+var catsList = Array.isArray(categories) ? categories : (categories.children || []);
+var displayCats = catsList.filter(function(c) {
+  return c.slug !== 'version' && c.slug !== 'deprecated' && c.slug !== 'removed' && c.slug !== 'uncategorized';
+});
+
+var sidebarHTML = '';
+sidebarHTML += '<div class="nav-search"><input type="text" id="nav-search" placeholder="Filter APIs..."></div>';
+
+for (var i = 0; i < displayCats.length; i++) {
+  sidebarHTML += renderTree(displayCats[i], categoryEntries, entries, currentId, 0);
+}
+
+// Add cheatsheet link
+sidebarHTML += '<div class="nav-category"><ul class="nav-cat-list">';
+sidebarHTML += '<li><a class="nav-link nav-cheatsheet" href="cheatsheet.html">Cheatsheet</a></li>';
+sidebarHTML += '</ul></div>';
+%>
+<%- sidebarHTML %>
+<script>
+(function() {
+  var searchInput = document.getElementById('nav-search');
+  if (!searchInput) return;
+  searchInput.addEventListener('input', function() {
+    var q = this.value.toLowerCase();
+    var links = document.querySelectorAll('#sidebar .nav-link');
+    links.forEach(function(link) {
+      var text = link.textContent.toLowerCase();
+      var li = link.parentElement;
+      if (!q || text.indexOf(q) !== -1) {
+        li.style.display = '';
+      } else {
+        li.style.display = 'none';
+      }
+    });
+    // Show/hide categories based on whether they have visible children
+    var cats = document.querySelectorAll('#sidebar .nav-category');
+    cats.forEach(function(cat) {
+      var visible = cat.querySelectorAll('.nav-link:not([style*="display: none"])').length > 0 ||
+                    cat.querySelectorAll('li[style=""] .nav-link').length > 0;
+      cat.style.display = (q && !visible) ? 'none' : '';
+    });
+  });
+})();
+</script>
