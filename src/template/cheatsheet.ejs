@@ -1,0 +1,410 @@
+<%
+/**
+ * Cheatsheet — multi-column API reference with version-range filter.
+ * Ranges are built from actual semver breakpoints (added/deprecated/removed).
+ */
+function _(key) { return (typeof ui !== 'undefined' && ui && ui[key]) ? ui[key] : key; }
+// Parse any jQuery version string to a numeric value for comparison.
+// Handles: "1.0", "1.10.3", "1.10-and-2.0", "1.12-and-2.2", "1" (bare major)
+function parseVer(v) {
+  if (!v) return 0;
+  // Normalize combined markers: "1.10-and-2.0" → "1.10"
+  var clean = String(v).replace(/-and-.*$/, '');
+  // Split on dots only (hyphens already stripped)
+  var parts = clean.split('.');
+  var maj = parseInt(parts[0], 10) || 0;
+  var min = parseInt(parts[1], 10) || 0;
+  var patch = parseInt(parts[2], 10) || 0;
+  return maj * 1000000 + min * 1000 + patch;
+}
+function fmtVer(v) {
+  var clean = String(v).replace(/-and-.*$/, '');
+  var parts = clean.split('.');
+  return parts[0] + '.' + (parts[1] || '0');
+}
+// Build version string from parsed numeric value
+function unparseVer(n) {
+  var maj = Math.floor(n / 1000000);
+  var min = Math.floor((n % 1000000) / 1000);
+  return maj + '.' + min;
+}
+
+// Collect breakpoints only from deprecation & removal events — these are the
+// versions where the API surface actually changed in a user-visible way.
+var breakpoints = {};
+breakpoints['1.0'] = true; // always include 1.0 as start
+for (var i = 0; i < entries.length; i++) {
+  var ev = entries[i].versions;
+  if (ev.deprecated) breakpoints[ev.deprecated] = true;
+  if (ev.removed) breakpoints[ev.removed] = true;
+}
+
+// Sort breakpoints by semver, normalize to major.minor, deduplicate
+var bpList = Object.keys(breakpoints).sort(function(a, b) { return parseVer(a) - parseVer(b); });
+var majors = {}; // deduplicate to major.minor
+for (var bi = 0; bi < bpList.length; bi++) {
+  var normalized = fmtVer(bpList[bi]);
+  majors[normalized] = true;
+}
+var verList = Object.keys(majors).sort(function(a, b) { return parseVer(a) - parseVer(b); });
+
+// Build ranges: half-open intervals [from, to)
+// Show labels as "X.Y.0 – A.B.x" for clarity
+function prevMinor(v) {
+  var parts = String(v).split('.');
+  var maj = parseInt(parts[0], 10);
+  var min = parseInt(parts[1] || 0, 10);
+  if (min === 0) return (maj - 1) + '.x';
+  return maj + '.' + (min - 1) + '.x';
+}
+var ranges = [];
+for (var ri = 0; ri < verList.length; ri++) {
+  var from = verList[ri];
+  var to = (ri + 1 < verList.length) ? verList[ri + 1] : '';
+  var label;
+  if (!to) {
+    label = 'jQuery ≥ ' + fmtVer(from) + '.0';
+  } else {
+    label = 'jQuery ' + fmtVer(from) + '.0 – ' + prevMinor(to);
+  }
+  ranges.push({ from: from, to: to, label: label });
+}
+
+var entryMap = {};
+for (var i = 0; i < entries.length; i++) {
+  entryMap[entries[i].id] = entries[i];
+}
+
+var catsList = Array.isArray(categories) ? categories : (categories.children || []);
+var displayCats = catsList.filter(function(c) {
+  return c.slug !== 'version' && c.slug !== 'deprecated' && c.slug !== 'removed' && c.slug !== 'uncategorized';
+});
+
+// Tooltip HTML builder
+function buildTooltip(entry) {
+  var html = '<div class="tt-desc">' + (entry.desc || '') + '</div>';
+  // Signatures
+  if (entry.signatures && entry.signatures.length > 0) {
+    html += '<div class="tt-sig">';
+    for (var si = 0; si < entry.signatures.length; si++) {
+      var sig = entry.signatures[si];
+      var args = sig.arguments ? sig.arguments.map(function(a) { return a.name; }).join(', ') : '';
+      html += '<code>' + entry.title + '(' + args + ')</code>';
+      if (entry.return) html += ' → <em>' + entry.return + '</em>';
+      if (si < entry.signatures.length - 1) html += '<br>';
+    }
+    html += '</div>';
+  }
+  // Version status
+  var ul = (typeof ui !== 'undefined' && ui) ? ui : {};
+  html += '<div class="tt-ver">';
+  if (entry.versions.added) html += (ul['Added'] || 'Added') + ' ' + entry.versions.added;
+  if (entry.versions.deprecated) html += ' · ' + (ul['Deprecated'] || 'Deprecated') + ' ' + entry.versions.deprecated;
+  if (entry.versions.removed) html += ' · ' + (ul['Removed'] || 'Removed') + ' ' + entry.versions.removed;
+  html += '</div>';
+  return html;
+}
+
+// Sort by entry count descending
+displayCats.sort(function(a, b) {
+  function total(n) { var c = (categoryEntries[n.slug]||[]).length; if(n.children)n.children.forEach(function(ch){c+=total(ch)}); return c; }
+  return total(b) - total(a);
+});
+
+function collectEntries(node, entriesMap) {
+  var seen = {};
+  var result = [];
+  function add(ids) {
+    for (var k = 0; k < ids.length; k++) {
+      if (!seen[ids[k]]) { seen[ids[k]] = true; result.push(ids[k]); }
+    }
+  }
+  add(entriesMap[node.slug] || []);
+  if (node.children) {
+    for (var j = 0; j < node.children.length; j++) {
+      add(collectEntries(node.children[j], entriesMap));
+    }
+  }
+  return result;
+}
+
+function absStatus(entry) {
+  if (entry.versions.removed) return 'removed';
+  if (entry.versions.deprecated) return 'deprecated';
+  return 'active';
+}
+
+// Version label for "All Versions" — placed before API name, colored by status
+// Green: active, Yellow: deprecated, Red: removed
+// Version label — latest-version perspective:
+// 1.0-based: removed→Z.W-(red) | deprecated→Z.W-(yellow) | active→blank
+// non-1.0:   removed→X.Y+ Z.W-(red) | deprecated→X.Y+ Z.W-(yellow) | active→X.Y+(green)
+function verLabel(entry) {
+  var added = fmtVer(entry.versions.added || '1.0');
+  var from1 = (added === '1.0');
+  if (entry.versions.removed) {
+    var r = fmtVer(entry.versions.removed);
+    return '<span class="ver-label ver-removed">' + (from1 ? r + '-' : added + '+ ' + r + '-') + '</span>';
+  }
+  if (entry.versions.deprecated) {
+    var d = fmtVer(entry.versions.deprecated);
+    return '<span class="ver-label ver-deprecated">' + (from1 ? d + '-' : added + '+ ' + d + '-') + '</span>';
+  }
+  if (from1) return '';
+  return '<span class="ver-label ver-active">' + added + '+</span>';
+}
+%>
+<div class="cheatsheet-page">
+<header class="cheatsheet-header">
+  <div class="cheatsheet-top-bar">
+    <h1><%= (typeof ui !== 'undefined' && ui && ui['jQuery API Cheatsheet']) || 'jQuery API Cheatsheet' %></h1>
+    <% if (typeof buildTag !== 'undefined' && buildTag) { %><span class="cheatsheet-build-tag"><%= buildTag %></span><% } %>
+    <div class="lang-switch-inline">
+      <a href="#" class="lang-switch-link" data-lang="en">EN</a>
+      <span class="lang-switch-sep">|</span>
+      <a href="#" class="lang-switch-link" data-lang="zh">中文</a>
+    </div>
+  </div>
+  <div class="cheatsheet-controls">
+    <input type="text" id="cheatsheet-search" placeholder="<%= (typeof ui !== 'undefined' && ui && ui['Search APIs...']) || 'Search APIs...' %>" autofocus>
+    <span id="search-count"></span>
+    <div class="cheatsheet-ver-filter">
+      <select id="cheatsheet-version">
+        <option value="" data-from="" data-to=""><%= (typeof ui !== 'undefined' && ui && ui['All Versions']) || 'All Versions' %></option>
+        <% for (var ri = 0; ri < ranges.length; ri++) { %>
+          <option value="<%= ranges[ri].from %>" data-from="<%= ranges[ri].from %>" data-to="<%= ranges[ri].to %>"><%= ranges[ri].label %></option>
+        <% } %>
+      </select>
+    </div>
+  </div>
+  <div class="cheatsheet-legend" id="cheatsheet-legend">
+    <span class="ver-active"><%= (typeof ui !== 'undefined' && ui && ui['Active']) || 'Act' %></span>
+    <span class="ver-deprecated"><%= (typeof ui !== 'undefined' && ui && ui['Deprecated']) || 'Depr' %></span>
+    <span class="ver-removed"><%= (typeof ui !== 'undefined' && ui && ui['Removed']) || 'Rem' %></span>
+  </div>
+</header>
+
+<div id="cheatsheet-grid" class="cheatsheet-grid">
+  <% for (var i = 0; i < displayCats.length; i++) {
+    var cat = displayCats[i];
+    var allCatEntries = collectEntries(cat, categoryEntries);
+  %>
+    <div class="cheatsheet-category" data-category="<%= cat.slug %>">
+      <h2><%= cat.name %></h2>
+      <% if (cat.children && cat.children.length > 0) { %>
+        <% for (var si = 0; si < cat.children.length; si++) {
+          var sub = cat.children[si];
+          var subEntries = collectEntries(sub, categoryEntries);
+          if (subEntries.length === 0) continue;
+        %>
+        <div class="cheatsheet-subcat" data-subcategory="<%= sub.slug %>">
+          <h3><%= sub.name %></h3>
+          <ul>
+            <% for (var ei = 0; ei < subEntries.length; ei++) {
+              var e = entryMap[subEntries[ei]];
+              if (!e || !e.title) continue;
+              var sAll = absStatus(e);
+            %>
+            <li class="cheatsheet-entry entry-<%= absStatus(e) %>" data-id="<%= e.id %>" data-name="<%= e.title.toLowerCase() %>" data-desc="<%= e.desc.toLowerCase() %>" data-added="<%= e.versions.added || '1.0' %>" data-removed="<%= e.versions.removed || '' %>" data-deprecated="<%= e.versions.deprecated || '' %>" data-cats="<%= e.categories.join(' ') %>" data-tooltip="<%- he.encode(buildTooltip(e), {useNamedReferences: true}) %>">
+              <a href="api/<%= e.id %>.html">
+                <span class="cheatsheet-name"><%= e.title %></span><span class="cheatsheet-ver-tag"><%- verLabel(e) %></span>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </div>
+        <% } %>
+      <% } %>
+      <% if (allCatEntries.length > 0 && (!cat.children || cat.children.length === 0)) { %>
+        <ul>
+          <% for (var ei = 0; ei < allCatEntries.length; ei++) {
+            var e = entryMap[allCatEntries[ei]];
+            if (!e || !e.title) continue;
+            var sAll = absStatus(e);
+          %>
+          <li class="cheatsheet-entry entry-<%= absStatus(e) %>" data-id="<%= e.id %>" data-name="<%= e.title.toLowerCase() %>" data-desc="<%= e.desc.toLowerCase() %>" data-added="<%= e.versions.added || '1.0' %>" data-removed="<%= e.versions.removed || '' %>" data-deprecated="<%= e.versions.deprecated || '' %>" data-cats="<%= e.categories.join(' ') %>" data-tooltip="<%- he.encode(buildTooltip(e), {useNamedReferences: true}) %>">
+            <a href="api/<%= e.id %>.html">
+              <span class="cheatsheet-name"><%= e.title %></span><span class="cheatsheet-ver-tag"><%- verLabel(e) %></span>
+            </a>
+          </li>
+          <% } %>
+        </ul>
+      <% } %>
+    </div>
+  <% } %>
+</div>
+
+<footer class="cheatsheet-footer">
+  <p>
+    <%= entries.length %> APIs &bull; jQuery 1.0–4.x &bull; <a href="https://api.jquery.com">api.jquery.com</a>
+    <% if (typeof buildTag !== 'undefined' && buildTag) { %> &bull; <strong><%= buildTag %></strong><% } %>
+    <% if (typeof buildDate !== 'undefined' && buildDate) { %> &bull; <%= buildDate %><% } %>
+  </p>
+  <p style="margin-top:4px">
+    <a href="https://github.com/byte-me-labs/jquery-docs">GitHub</a> &bull;
+    <a href="https://github.com/byte-me-labs/jquery-docs/releases">CHM Download</a> &bull;
+    <a href="https://byte-me-labs.github.io/jquery-docs/">Online Docs</a>
+  </p>
+</footer>
+</div>
+
+<script>
+$(function() {
+  // Dynamic column layout — works in CHM and modern browsers
+  var $grid = $('#cheatsheet-grid');
+  var $cats = $grid.children('.cheatsheet-category');
+  var COLS = Math.max(1, Math.floor($grid.width() / 200));
+  var $colDivs = [];
+  var colHeights = [];
+  var colW = Math.floor(100 / COLS * 100) / 100; // e.g. 33.33% for 3 cols
+  for (var c = 0; c < COLS; c++) {
+    $colDivs.push($('<div class="cheatsheet-col"></div>').css('width', colW + '%'));
+    colHeights.push(0);
+  }
+  $cats.each(function() {
+    var h = $(this).outerHeight() || 60;
+    var shortest = 0;
+    for (var c = 1; c < COLS; c++) { if (colHeights[c] < colHeights[shortest]) shortest = c; }
+    $colDivs[shortest].append(this);
+    colHeights[shortest] += h;
+  });
+  $grid.empty().append($colDivs);
+  // Refresh jQuery collections after DOM move
+  var $entries = $('.cheatsheet-entry');
+  var $subcats = $('.cheatsheet-subcat');
+  $cats = $('.cheatsheet-category');
+
+  var $search = $('#cheatsheet-search');
+  var $count = $('#search-count');
+  var $verSelect = $('#cheatsheet-version');
+  var $sidebarVer = $('#nav-version');
+
+  // Sync both version selects
+  function syncVersion(src) {
+    var val = src.value;
+    if ($verSelect[0] !== src) $verSelect.val(val);
+    if ($sidebarVer[0] !== src) $sidebarVer.val(val);
+  }
+  $verSelect.on('change', function() { syncVersion(this); filterAll(); });
+  $sidebarVer.on('change', function() { syncVersion(this); filterAll(); });
+
+  function getVersionSelect() {
+    if ($verSelect.is(':visible')) return $verSelect[0];
+    if ($sidebarVer.is(':visible')) return $sidebarVer[0];
+    return $verSelect[0] || $sidebarVer[0];
+  }
+
+  function parseVer(v) {
+    if (!v) return 0;
+    var clean = String(v).replace(/-and-.*$/, '');
+    var parts = clean.split('.');
+    var maj = parseInt(parts[0], 10) || 0;
+    var min = parseInt(parts[1], 10) || 0;
+    var patch = parseInt(parts[2], 10) || 0;
+    return maj * 1000000 + min * 1000 + patch;
+  }
+
+  // Save original labels
+  $entries.each(function() {
+    var $t = $(this).find('.cheatsheet-ver-tag');
+    if ($t.length && !$(this).attr('data-ver-label')) {
+      $(this).attr('data-ver-label', $t.html());
+    }
+  });
+
+  function versionMatch(el, fv, tv) {
+    if (!fv) return true;
+    var $el = $(el);
+    var added = parseVer($el.attr('data-added') || '1.0');
+    if (added >= parseVer(tv || '999.999.999')) return false;
+    return true; // removed APIs stay visible with "Removed" status
+  }
+
+  function rangeStatus(el, fv, tv) {
+    if (!fv) return $(el).attr('data-removed') ? 'removed' : ($(el).attr('data-deprecated') ? 'deprecated' : 'active');
+    var $el = $(el);
+    var r = $el.attr('data-removed'), d = $el.attr('data-deprecated');
+    var pfv = parseVer(fv), ptv = parseVer(tv || '999.999.999');
+    if (r && parseVer(r) <= pfv) return 'removed'; // removed at or before range start
+    if (d && parseVer(d) <= pfv) return 'deprecated';
+    return 'active';
+  }
+
+  // Translated status labels for version filter display
+  var statusLabels = {
+    active: '<%= (typeof ui !== "undefined" && ui && ui["Active"]) || "Act" %>',
+    deprecated: '<%= (typeof ui !== "undefined" && ui && ui["Deprecated"]) || "Depr" %>',
+    removed: '<%= (typeof ui !== "undefined" && ui && ui["Removed"]) || "Rem" %>',
+    na: 'N/A'
+  };
+
+  function updateVerTag(el, fv) {
+    var $el = $(el), $tag = $el.find('.cheatsheet-ver-tag'), $name = $el.find('.cheatsheet-name');
+    if (!$tag.length) return;
+    // Compute intrinsic status from data attributes
+    var intrinsic = $el.attr('data-removed') ? 'removed' : ($el.attr('data-deprecated') ? 'deprecated' : 'active');
+    // Remove previous status classes from li
+    $el.removeClass('entry-active entry-deprecated entry-removed entry-na');
+    if (fv) {
+      var inRange = versionMatch(el, fv, $verSelect.find('option:selected').attr('data-to') || '');
+      var st = inRange ? rangeStatus(el, fv, $verSelect.find('option:selected').attr('data-to') || '') : 'na';
+      var label = statusLabels[st] || st;
+      $tag.html(label).attr('class', 'cheatsheet-ver-tag ver-status-' + st);
+      $name.css('opacity', st === 'na' ? '0.4' : '');
+      $el.addClass('entry-' + st);
+    } else {
+      $tag.html($(el).attr('data-ver-label') || '').attr('class', 'cheatsheet-ver-tag');
+      $name.css('opacity', '');
+      $el.addClass('entry-' + intrinsic);
+    }
+  }
+
+  function filterAll() {
+    var q = ($search.val() || '').toLowerCase().trim();
+    var vs = getVersionSelect();
+    var $opt = vs ? $(vs).find('option:selected') : $();
+    var fv = $opt.attr('data-from') || '';
+    var tv = $opt.attr('data-to') || '';
+    var visible = 0;
+
+    // Always show all containers first so children can be visible
+    if (q) {
+      $subcats.show();
+      $cats.show();
+    }
+
+    $entries.each(function() {
+      var $el = $(this);
+      var h = ($el.attr('data-name')||'') + ' ' + ($el.attr('data-desc')||'') + ' ' + ($el.attr('data-cats')||'');
+      var match = !q || h.toLowerCase().indexOf(q) !== -1;
+      if (match) { $el.show(); } else { $el.hide(); }
+      if (match) { updateVerTag(this, fv); visible++; }
+    });
+
+    // Hide empty containers only when searching
+    if (q) {
+      $subcats.each(function() { $(this).toggle($(this).find('.cheatsheet-entry:visible').length > 0); });
+      $cats.each(function() { $(this).toggle($(this).find('.cheatsheet-entry:visible').length > 0); });
+    }
+    $count.text(visible + ' of ' + $entries.length + ' APIs');
+  }
+
+  filterAll();
+  $search.on('input', filterAll);
+
+  // Tooltip
+  var $tip = $('<div class="cheatsheet-tooltip" style="display:none"></div>').appendTo('body');
+  $entries.on('mouseenter', function() {
+    $tip.html($(this).attr('data-tooltip') || '').show();
+  }).on('mouseleave', function() {
+    $tip.hide();
+  }).on('mousemove', function(e) {
+    var x = (e || window.event).clientX + 12;
+    var y = (e || window.event).clientY - 10;
+    var tw = $tip.width() || 300, th = $tip.height() || 80;
+    if (x + tw > $(window).width()) x = $(window).width() - tw - 10;
+    if (y + th > $(window).height()) y = $(window).height() - th - 10;
+    $tip.css({left: x, top: y});
+  });
+});
+</script>
