@@ -7,25 +7,31 @@ on:
         description: 'Git ref for api.jquery.com source (branch/tag)'
         required: false
         default: 'main'
+      build_chm:
+        description: 'Build CHM file (requires Windows)'
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: '37 6 * * *'  # Daily at 06:37 UTC
 
+permissions:
+  contents: write
+
 jobs:
-  build:
-    runs-on: windows-latest
-    timeout-minutes: 30
+  build-html:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-      - name: Checkout jquery-docs
-        uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Clone upstream api.jquery.com
-        run: |
-          git clone --depth 1 https://github.com/jquery/api.jquery.com.git upstream
-        shell: bash
+        run: git clone --depth 1 https://github.com/jquery/api.jquery.com.git upstream
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
           cache: 'npm'
@@ -36,32 +42,6 @@ jobs:
       - name: Build (Parse + Generate)
         run: node scripts/build.js --source="./upstream" --skip-chm
 
-      - name: Verify build output
-        run: |
-          echo "API pages: $(ls dist/html/api/*.html 2>/dev/null | wc -l)"
-          echo "Index: $(test -f dist/html/index.html && echo 'yes' || echo 'MISSING')"
-          echo "Cheatsheet: $(test -f dist/html/cheatsheet.html && echo 'yes' || echo 'MISSING')"
-        shell: bash
-
-      - name: Install HTML Help Workshop
-        run: choco install html-help-workshop -y --no-progress
-        shell: pwsh
-
-      - name: Compile CHM
-        run: node scripts/chm-compile.js
-
-      - name: Upload CHM artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: jquery-api-reference-chm
-          path: dist/jquery-api-reference.chm
-
-      - name: Upload HTML artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: jquery-api-reference-html
-          path: dist/html/
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -69,8 +49,37 @@ jobs:
           publish_dir: dist/html
           full_commit_message: 'Deploy jQuery API docs [skip ci]'
 
+  build-chm:
+    if: github.event_name == 'workflow_dispatch' && inputs.build_chm
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clone upstream api.jquery.com
+        run: git clone --depth 1 https://github.com/jquery/api.jquery.com.git upstream
+        shell: bash
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install HTML Help Workshop
+        run: choco install html-help-workshop -y --no-progress
+        shell: pwsh
+
+      - name: Full Build + CHM
+        run: node scripts/build.js --source="./upstream"
+        shell: bash
+
       - name: Create GitHub Release
-        if: github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v3
         with:
           name: 'jQuery API Reference — Build ${{ github.run_number }}'
@@ -79,17 +88,9 @@ jobs:
           body: |
             ## jQuery API Reference CHM
 
-            - **Build date**: ${{ github.event.repository.updated_at }}
-            - **jQuery API source**: [api.jquery.com](https://github.com/jquery/api.jquery.com)
             - **Online version**: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+            - **jQuery API source**: [api.jquery.com](https://github.com/jquery/api.jquery.com)
 
-            ### Download
             Download the CHM file below for offline use on Windows.
-
-            ### Contents
-            - API documentation for all jQuery methods, selectors, and properties
-            - Searchable cheatsheet with version status indicators
-            - Category-based Table of Contents
-            - Keyword Index
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
