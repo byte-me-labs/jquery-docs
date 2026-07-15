@@ -129,7 +129,7 @@ jobs:
         with:
           name: "jQuery API Reference — ${{ env.UPSTREAM_TAG }}"
           tag_name: "${{ env.UPSTREAM_TAG }}"
-          files: dist/jquery-api-reference.chm
+          files: dist/html/jquery-api-reference.chm
           body: |
             ## jQuery API Reference — ${{ env.UPSTREAM_TAG }}
 

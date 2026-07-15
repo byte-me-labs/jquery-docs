@@ -247,12 +247,11 @@ async function main() {
       timeout: 120000
     });
 
-    // Move CHM to dist/
+    // CHM is generated alongside the HTML in dist/html/
     const generatedChm = path.join(htmlDir, 'jquery-api-reference.chm');
     if (await fs.pathExists(generatedChm)) {
-      await fs.move(generatedChm, chmOutput, { overwrite: true });
-      console.log('  CHM compiled successfully: ' + chmOutput);
-      const stats = await fs.stat(chmOutput);
+      console.log('  CHM compiled successfully: ' + generatedChm);
+      const stats = await fs.stat(generatedChm);
       console.log('  Size: ' + (stats.size / 1024 / 1024).toFixed(2) + ' MB');
     } else {
       console.warn('Warning: CHM file not generated. Check HTML Help Workshop output.');

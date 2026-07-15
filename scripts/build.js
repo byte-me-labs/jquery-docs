@@ -73,7 +73,7 @@ async function build() {
   console.log(`   ${apiCount} API pages generated`);
   console.log(`   Output: ${htmlDir}`);
 
-  const chmPath = path.resolve(__dirname, '..', 'dist', 'jquery-api-reference.chm');
+  const chmPath = path.resolve(__dirname, '..', 'dist', 'html', 'jquery-api-reference.chm');
   if (fs.existsSync(chmPath)) {
     const stats = fs.statSync(chmPath);
     console.log(`   CHM: ${chmPath} (${(stats.size / 1024 / 1024).toFixed(2)} MB)`);
