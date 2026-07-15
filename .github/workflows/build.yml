@@ -4,31 +4,66 @@ on:
   workflow_dispatch:
     inputs:
       source_ref:
-        description: 'Git ref for api.jquery.com source (branch/tag)'
+        description: 'api.jquery.com tag (leave empty for latest)'
         required: false
-        default: 'main'
-      build_chm:
-        description: 'Build CHM file (requires Windows)'
-        required: false
-        default: false
-        type: boolean
+        default: ''
   schedule:
-    - cron: '37 6 * * *'  # Daily at 06:37 UTC
+    - cron: '37 6 * * *'
 
 permissions:
   contents: write
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      upstream_tag: ${{ steps.tag.outputs.tag }}
+      should_build: ${{ steps.check.outputs.should_build }}
+    steps:
+      - name: Get latest upstream tag
+        id: tag
+        run: |
+          TAG=$(git ls-remote --tags --refs --sort=-version:refname https://github.com/jquery/api.jquery.com.git \
+            | grep -oP 'refs/tags/\K[0-9].*' \
+            | head -1)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Upstream tag: $TAG"
+
+      - name: Check if release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual trigger — always build"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          TAG="${{ steps.tag.outputs.tag }}"
+          if gh release view "$TAG" -R "${{ github.repository }}" &>/dev/null; then
+            echo "Release $TAG already exists — skipping"
+            echo "should_build=false" >> $GITHUB_OUTPUT
+          else
+            echo "No release for $TAG — triggering build"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+          fi
+
   build-html:
+    needs: check
+    if: needs.check.outputs.should_build == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      UPSTREAM_TAG: ${{ needs.check.outputs.upstream_tag }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Clone upstream api.jquery.com
-        run: git clone --depth 1 https://github.com/jquery/api.jquery.com.git upstream
+      - name: Clone upstream at tag
+        run: |
+          git clone --depth 1 --branch "$UPSTREAM_TAG" https://github.com/jquery/api.jquery.com.git upstream
+        shell: bash
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -47,20 +82,30 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist/html
-          full_commit_message: 'Deploy jQuery API docs [skip ci]'
+          full_commit_message: "Deploy jQuery API docs ($UPSTREAM_TAG) [skip ci]"
+
+      - name: Upload HTML as artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: jquery-api-html
+          path: dist/html/
 
   build-chm:
-    if: github.event_name == 'workflow_dispatch' && inputs.build_chm
+    needs: build-html
+    if: needs.check.outputs.should_build == 'true'
     runs-on: windows-latest
     timeout-minutes: 20
+    env:
+      UPSTREAM_TAG: ${{ needs.check.outputs.upstream_tag }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Clone upstream api.jquery.com
-        run: git clone --depth 1 https://github.com/jquery/api.jquery.com.git upstream
-        shell: bash
+      - name: Clone upstream at tag
+        run: |
+          git clone --depth 1 --branch "$env:UPSTREAM_TAG" https://github.com/jquery/api.jquery.com.git upstream
+        shell: pwsh
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -79,18 +124,18 @@ jobs:
         run: node scripts/build.js --source="./upstream"
         shell: bash
 
-      - name: Create GitHub Release
+      - name: Create Release with CHM
         uses: softprops/action-gh-release@v3
         with:
-          name: 'jQuery API Reference — Build ${{ github.run_number }}'
-          tag_name: 'release-${{ github.run_number }}'
+          name: "jQuery API Reference — ${{ env.UPSTREAM_TAG }}"
+          tag_name: "${{ env.UPSTREAM_TAG }}"
           files: dist/jquery-api-reference.chm
           body: |
-            ## jQuery API Reference CHM
+            ## jQuery API Reference — ${{ env.UPSTREAM_TAG }}
 
-            - **Online version**: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
-            - **jQuery API source**: [api.jquery.com](https://github.com/jquery/api.jquery.com)
+            - **Online docs**: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+            - **Upstream source**: [api.jquery.com ${{ env.UPSTREAM_TAG }}](https://github.com/jquery/api.jquery.com/releases/tag/${{ env.UPSTREAM_TAG }})
 
-            Download the CHM file below for offline use on Windows.
+            Download `jquery-api-reference.chm` below for offline use.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
