@@ -7,6 +7,8 @@
 *, *:before, *:after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
+  margin: 0;
+  padding: 0;
   font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Segoe UI", Tahoma, sans-serif;
   font-size: 14px;
   line-height: 1.6;
@@ -44,28 +46,34 @@ th, td { border: 1px solid #e2e8f0; padding: 7px 12px; text-align: left; }
 th { background: #f1f5f9; font-weight: 600; color: #1e293b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
 
 /* --- Layout --- */
-#layout { display: table; width: 100%; height: 100vh; table-layout: fixed; }
+#layout { min-height: 100vh; }
 
 #sidebar {
-  display: table-cell;
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 190px;
-  vertical-align: top;
+  height: 100vh;
   background: #f8fafc;
   border-right: 1px solid #e2e8f0;
+  z-index: 10;
+  overflow: hidden;
 }
 #sidebar-inner {
-  height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 #content {
-  display: table-cell;
-  vertical-align: top;
+  margin-left: 190px;
   padding: 32px 40px;
   max-width: 820px;
-  height: 100vh;
-  overflow-y: auto;
+  min-height: 100vh;
 }
 
 /* --- Sidebar --- */
@@ -73,11 +81,14 @@ th { background: #f1f5f9; font-weight: 600; color: #1e293b; font-size: 12px; tex
   padding: 12px 14px;
   background: #1e293b;
   color: #fff;
+  position: relative;
+  z-index: 1;
 }
 .sidebar-header h2 { font-size: 13px; font-weight: 600; margin: 0; border: none; padding: 0; color: #fff; letter-spacing: -0.01em; }
 .sidebar-header a { color: #fff; text-decoration: none; }
 
 /* Sidebar version filter */
+.nav-fixed-controls { position: sticky; top: 0; z-index: 2; background: #f8fafc; margin: 0; padding: 0; }
 .nav-version { padding: 6px 10px; border-bottom: 1px solid #e2e8f0; }
 .nav-version select {
   width: 100%;
@@ -272,30 +283,40 @@ th { background: #f1f5f9; font-weight: 600; color: #1e293b; font-size: 12px; tex
 
 /* --- Cheatsheet --- */
 .cheatsheet-page { background: #fff; }
-.cheatsheet-page #content { display: block; max-width: none; padding: 0; height: auto; overflow: visible; }
+.page-cheatsheet #content { max-width: none; padding: 0; min-height: 100vh; }
 
 .cheatsheet-header {
   background: #1e293b;
   color: #f1f5f9;
-  padding: 20px 28px;
+  padding: 8px 20px;
   border-bottom: 1px solid #334155;
 }
 .cheatsheet-header h1 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #f8fafc;
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   padding: 0;
   border: none;
   letter-spacing: -0.01em;
 }
+.cheatsheet-build-tag {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 11px;
+  color: #94a3b8;
+  background: #334155;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
 
-.cheatsheet-controls { margin: 8px 0; }
+.cheatsheet-controls { margin: 4px 0; }
 .cheatsheet-controls input {
   padding: 7px 12px;
   border: 1px solid #475569;
   border-radius: 5px;
-  font-size: 13px;
+  font-size: 14px;
   width: 280px;
   vertical-align: middle;
   background: #334155;
@@ -319,18 +340,20 @@ th { background: #f1f5f9; font-weight: 600; color: #1e293b; font-size: 12px; tex
 #search-count { margin-left: 14px; font-size: 12px; color: #94a3b8; }
 
 /* CHM mode: no sidebar, full-width content */
+.layout-chm, .layout-chm body { margin: 0; padding: 0; }
 .layout-chm #sidebar { display: none; }
-.layout-chm #content { display: block; max-width: none; padding: 0; height: auto; overflow: visible; }
+.layout-chm #content { margin-left: 0; max-width: none; padding: 0; min-height: 100vh; }
 .layout-chm .cheatsheet-header { border-radius: 0; }
 
-.cheatsheet-legend { margin-top: 8px; font-size: 11px; color: #94a3b8; }
+.cheatsheet-legend { margin-top: 4px; font-size: 11px; color: #94a3b8; }
 .cheatsheet-legend span { margin-right: 16px; font-weight: 500; }
 
-/* Base: float categories for CHM (IE engine) */
-.cheatsheet-grid { overflow: hidden; padding: 10px 14px; }
-.cheatsheet-category { float: left; width: 33.333%; padding: 0 6px; margin-bottom: 8px; }
+/* Base: float columns (jQuery redistributes on load) */
+.cheatsheet-grid { overflow: hidden; padding: 8px 16px; }
+.cheatsheet-col { float: left; padding: 0 6px; }
+.cheatsheet-category { margin-bottom: 6px; }
 .cheatsheet-category h2 {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #1e293b;
   padding: 0 0 2px;
@@ -342,7 +365,7 @@ th { background: #f1f5f9; font-weight: 600; color: #1e293b; font-size: 12px; tex
 
 .cheatsheet-subcat { margin: 1px 0; }
 .cheatsheet-subcat h3 {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   color: #94a3b8;
   padding: 1px 4px;
@@ -356,8 +379,8 @@ th { background: #f1f5f9; font-weight: 600; color: #1e293b; font-size: 12px; tex
 .cheatsheet-entry a {
   display: block;
   padding: 0 4px;
-  font-size: 11px;
-  line-height: 1.45;
+  font-size: 12px;
+  line-height: 1.5;
   color: #475569;
   text-decoration: none;
   white-space: nowrap;
@@ -370,7 +393,7 @@ th { background: #f1f5f9; font-weight: 600; color: #1e293b; font-size: 12px; tex
 .ver-status-na { color: #cbd5e1; }
 
 .cheatsheet-name { vertical-align: middle; }
-.cheatsheet-ver-tag { display: inline-block; min-width: 54px; font-size: 10px; margin-right: 2px; vertical-align: middle; white-space: nowrap; text-align: right; }
+.cheatsheet-ver-tag { display: inline-block; min-width: 60px; font-size: 11px; margin-right: 4px; vertical-align: middle; white-space: nowrap; text-align: right; }
 .ver-label { font-weight: 500; }
 .ver-active { color: #16a34a; }
 .ver-deprecated { color: #d97706; }
@@ -409,32 +432,12 @@ th { background: #f1f5f9; font-weight: 600; color: #1e293b; font-size: 12px; tex
 }
 .cheatsheet-footer a { color: #64748b; }
 
-/* --- Responsive (float fallback for CHM, modern browsers use column-width auto) --- */
-@media (max-width: 1100px) {
-  .cheatsheet-category { width: 50%; }
-}
+/* --- Responsive --- */
 @media (max-width: 768px) {
   #sidebar { display: none; }
-  #content { display: block; padding: 16px; }
-  .cheatsheet-category { float: none; width: 100%; padding: 0; }
-  .cheatsheet-grid { padding: 8px; }
-  .cheatsheet-header { padding: 14px 16px; }
+  #content { margin-left: 0; padding: 16px; }
+  .cheatsheet-col { float: none; width: 100% !important; padding: 0; }
+  .cheatsheet-grid { padding: 4px; }
+  .cheatsheet-header { padding: 10px 12px; }
   .cheatsheet-controls input { width: 100%; max-width: none; }
-}
-
-/* Progressive enhancement: CSS columns for modern browsers.
-   CHM (IE engine) skips @supports entirely — falls back to float layout above. */
-@supports (column-width: 200px) {
-  .cheatsheet-grid {
-    column-width: 230px;
-    column-gap: 14px;
-    padding: 12px 16px;
-    overflow: visible;
-  }
-  .cheatsheet-category {
-    float: none;
-    width: auto;
-    padding: 0;
-    break-inside: avoid;
-  }
 }
