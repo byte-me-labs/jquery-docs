@@ -91,7 +91,7 @@ jobs:
           path: dist/html/
 
   build-chm:
-    needs: build-html
+    needs: [check, build-html]
     if: needs.check.outputs.should_build == 'true'
     runs-on: windows-latest
     timeout-minutes: 20
