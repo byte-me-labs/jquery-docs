@@ -201,27 +201,38 @@ async function main() {
   const hhpPath = path.join(htmlDir, 'project.hhp');
 
   // Find hhc.exe
-  const hhcPaths = [
-    'C:\\Program Files (x86)\\HTML Help Workshop\\hhc.exe',
-    'C:\\Program Files\\HTML Help Workshop\\hhc.exe',
-    'hhc.exe'
-  ];
-
   let hhcExe = null;
-  for (const p of hhcPaths) {
-    try {
-      execSync('"' + p + '"', { stdio: 'pipe' });
-      // hhc.exe with no args returns error, but it means it exists
-    } catch (e) {
-      // hhc.exe exits with error when no args — but that confirms it exists
-      hhcExe = p;
-      break;
+  // Try finding via PATH first (works with Chocolatey install)
+  try {
+    const where = process.platform === 'win32' ? 'where hhc' : 'which hhc';
+    const out = execSync(where, { stdio: 'pipe', encoding: 'utf-8' });
+    const found = out.trim().split('\n')[0].trim();
+    if (found) {
+      hhcExe = found;
+      console.log('  Found hhc.exe:', hhcExe);
+    }
+  } catch (e) { /* not in PATH */ }
+
+  // Fallback: check known install paths
+  if (!hhcExe) {
+    const knownPaths = [
+      'C:\\Program Files (x86)\\HTML Help Workshop\\hhc.exe',
+      'C:\\Program Files\\HTML Help Workshop\\hhc.exe',
+      'C:\\ProgramData\\chocolatey\\bin\\hhc.exe',
+      'C:\\ProgramData\\chocolatey\\lib\\html-help-workshop\\tools\\hhc.exe'
+    ];
+    for (const p of knownPaths) {
+      if (fs.existsSync(p)) {
+        hhcExe = p;
+        console.log('  Found hhc.exe:', p);
+        break;
+      }
     }
   }
 
   if (!hhcExe) {
     console.warn('Warning: hhc.exe not found. Skipping CHM compilation.');
-    console.warn('Install HTML Help Workshop from: https://www.microsoft.com/en-us/download/details.aspx?id=21138');
+    console.warn('Install: choco install html-help-workshop -y');
     console.warn('HHP/HHC/HHK files generated in dist/html/ — compile manually.');
     return;
   }
