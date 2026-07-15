@@ -24,7 +24,7 @@ jobs:
         id: tag
         run: |
           TAG=$(git ls-remote --tags --refs --sort=-version:refname https://github.com/jquery/api.jquery.com.git \
-            | grep -oP 'refs/tags/\K[0-9].*' \
+            | grep -oP 'refs/tags/\Kv?[0-9].*' \
             | head -1)
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "Upstream tag: $TAG"
