@@ -9,8 +9,10 @@ const fs = require('fs-extra');
 const { execSync } = require('child_process');
 
 async function main() {
+  const tag = process.env.UPSTREAM_TAG || '';
+  const chmName = tag ? 'jquery-api-reference-' + tag + '.chm' : 'jquery-api-reference.chm';
   const htmlDir = path.resolve(__dirname, '..', 'dist', 'html');
-  const chmOutput = path.resolve(__dirname, '..', 'dist', 'jquery-api-reference.chm');
+  const chmOutput = path.join(htmlDir, chmName);
   const dataDir = path.resolve(__dirname, '..', 'data', 'en');
 
   console.log('Generating CHM project files...');
@@ -62,7 +64,7 @@ async function main() {
   console.log('  - Generating project.hhp...');
   let hhp = '[OPTIONS]\n';
   hhp += 'Compatibility=1.1 or later\n';
-  hhp += 'Compiled file=jquery-api-reference.chm\n';
+  hhp += 'Compiled file=' + chmName + '\n';
   hhp += 'Contents file=index.hhc\n';
   hhp += 'Index file=index.hhk\n';
   hhp += 'Default Window=main\n';
@@ -247,11 +249,9 @@ async function main() {
       timeout: 120000
     });
 
-    // CHM is generated alongside the HTML in dist/html/
-    const generatedChm = path.join(htmlDir, 'jquery-api-reference.chm');
-    if (await fs.pathExists(generatedChm)) {
-      console.log('  CHM compiled successfully: ' + generatedChm);
-      const stats = await fs.stat(generatedChm);
+    if (await fs.pathExists(chmOutput)) {
+      console.log('  CHM compiled successfully: ' + chmOutput);
+      const stats = await fs.stat(chmOutput);
       console.log('  Size: ' + (stats.size / 1024 / 1024).toFixed(2) + ' MB');
     } else {
       console.warn('Warning: CHM file not generated. Check HTML Help Workshop output.');
