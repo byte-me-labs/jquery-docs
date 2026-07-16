@@ -69,8 +69,12 @@ async function build() {
   console.log('✅ Build complete!');
 
   const htmlDir = path.resolve(__dirname, '..', 'dist', 'html');
-  const apiCount = fs.readdirSync(path.join(htmlDir, 'api')).filter(f => f.endsWith('.html')).length;
-  console.log(`   ${apiCount} API pages generated`);
+  let apiCount = 0;
+  for (const lang of ['en', 'zh']) {
+    const apiDir = path.join(htmlDir, lang, 'api');
+    if (fs.existsSync(apiDir)) apiCount += fs.readdirSync(apiDir).filter(f => f.endsWith('.html')).length;
+  }
+  console.log(`   ${apiCount} API pages generated (${apiCount/2} per language)`);
   console.log(`   Output: ${htmlDir}`);
 
   const tag = process.env.UPSTREAM_TAG || '';
