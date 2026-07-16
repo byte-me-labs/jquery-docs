@@ -61,14 +61,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Clone upstream at tag
         run: |
           git clone --depth 1 --branch "$UPSTREAM_TAG" https://github.com/jquery/api.jquery.com.git upstream
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
           cache: 'npm'
@@ -111,7 +111,7 @@ jobs:
 
       - name: Create PR with translations
         if: steps.validate.outputs.gaps != '0'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "fix: auto-translate gaps for ${{ env.UPSTREAM_TAG }}"
           title: "Translation auto-fill for ${{ env.UPSTREAM_TAG }}"
@@ -125,7 +125,7 @@ jobs:
           delete-branch: true
 
       - name: Upload HTML as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: jquery-api-html
           path: dist/html/
@@ -140,14 +140,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Clone upstream at tag
         run: |
           git clone --depth 1 --branch "$env:UPSTREAM_TAG" https://github.com/jquery/api.jquery.com.git upstream
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
           cache: 'npm'
@@ -162,13 +162,13 @@ jobs:
         run: node scripts/build.js --source="./upstream"
 
       - name: Upload CHM artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: jquery-api-chm
           path: dist/html/jquery-api-reference-*.chm
 
       - name: Create Release with CHM
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name: "jQuery API Reference — ${{ env.UPSTREAM_TAG }}"
           tag_name: "${{ env.UPSTREAM_TAG }}"
