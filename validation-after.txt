@@ -1,0 +1,294 @@
+
+============================================================
+Chinese Translation Validation
+============================================================
+Coverage: 2183/2185 (99.9%)
+Gaps: 1
+Length issues (<30% ratio): 138
+
+--- Gaps ---
+  jQuery.ajax | longdesc | missing ZH translation
+
+--- Short Translations (ZH < 30% of EN) ---
+  jQuery.ajax
+    - longdesc MISSING (EN:12694 chars)
+  next-siblings-selector
+    - desc 19/133 (14%)
+  die
+    - longdesc 134/736 (18%)
+  attribute-not-equal-selector
+    - desc 23/128 (18%)
+  attribute-ends-with-selector
+    - desc 24/133 (18%)
+  prev
+    - desc 35/180 (19%)
+  only-of-type-selector
+    - longdesc 23/86 (27%)
+    - desc 14/70 (20%)
+  nth-last-of-type-selector
+    - desc 32/160 (20%)
+  next
+    - desc 35/176 (20%)
+  lt-selector
+    - desc 13/64 (20%)
+  jQuery.uniqueSort
+    - longdesc 124/635 (20%)
+  data
+    - longdesc 467/2375 (20%)
+  ajaxSuccess-shorthand
+    - desc 19/93 (20%)
+  root-selector
+    - desc 11/53 (21%)
+  jQuery.sub
+    - desc 25/119 (21%)
+  event.result
+    - desc 21/99 (21%)
+  addClass
+    - desc 16/76 (21%)
+  removeClass
+    - desc 20/91 (22%)
+  nextUntil
+    - desc 30/138 (22%)
+  height
+    - desc 19/85 (22%)
+  event.pageY
+    - desc 13/60 (22%)
+  checked-selector
+    - desc 11/50 (22%)
+  callbacks.disable
+    - desc 11/49 (22%)
+  attribute-starts-with-selector
+    - desc 22/102 (22%)
+  ajaxSend-shorthand
+    - desc 17/76 (22%)
+  wrapAll
+    - desc 17/74 (23%)
+  target-selector
+    - desc 20/86 (23%)
+  removeAttr
+    - desc 16/69 (23%)
+  queue
+    - desc 18/80 (23%)
+  prevUntil
+    - desc 30/131 (23%)
+  next-adjacent-selector
+    - desc 21/92 (23%)
+  map
+    - desc 28/124 (23%)
+  jQuery.trim
+    - desc 14/61 (23%)
+  jQuery.fx.interval
+    - desc 12/52 (23%)
+  event.pageX
+    - desc 14/61 (23%)
+  even
+    - desc 19/83 (23%)
+  callbacks.fired
+    - desc 15/66 (23%)
+  attribute-contains-prefix-selector
+    - desc 34/149 (23%)
+  animated-selector
+    - desc 21/93 (23%)
+  ajaxStop-shorthand
+    - desc 19/82 (23%)
+  scrollTop
+    - longdesc 52/215 (24%)
+    - desc 42/178 (24%)
+  prepend
+    - desc 26/108 (24%)
+  parent
+    - desc 25/105 (24%)
+  nth-of-type-selector
+    - desc 27/111 (24%)
+  jQuery.removeData
+    - desc 10/41 (24%)
+  jQuery.makeArray
+    - desc 14/58 (24%)
+  jQuery.grep
+    - desc 24/99 (24%)
+  jQuery.ajaxTransport
+    - desc 16/68 (24%)
+  jQuery.Callbacks
+    - desc 22/92 (24%)
+  event.which
+    - desc 22/93 (24%)
+  clearQueue
+    - desc 14/59 (24%)
+  attribute-equals-selector
+    - desc 23/97 (24%)
+  attribute-contains-selector
+    - desc 22/93 (24%)
+  animate
+    - desc 13/54 (24%)
+  ajaxComplete-shorthand
+    - desc 17/72 (24%)
+  undelegate
+    - desc 32/126 (25%)
+  offsetParent
+    - desc 13/52 (25%)
+  multiple-selector
+    - desc 15/60 (25%)
+  multiple-attribute-selector
+    - desc 17/67 (25%)
+  jQuery.speed
+    - desc 26/105 (25%)
+  jQuery.dequeue
+    - desc 16/63 (25%)
+  jQuery.Deferred
+    - desc 58/232 (25%)
+  has
+    - desc 27/108 (25%)
+  event.namespace
+    - longdesc 36/128 (28%)
+    - desc 13/53 (25%)
+  end
+    - desc 30/122 (25%)
+  callbacks.fire
+    - desc 13/51 (25%)
+  append
+    - desc 26/102 (25%)
+  ajaxSuccess
+    - desc 23/93 (25%)
+  ajaxStart-shorthand
+    - desc 20/79 (25%)
+  width
+    - desc 22/84 (26%)
+  toggleClass
+    - desc 42/160 (26%)
+  replaceWith
+    - desc 34/130 (26%)
+  prop
+    - desc 21/81 (26%)
+  jQuery.unique
+    - desc 38/147 (26%)
+  jQuery.queue
+    - desc 19/72 (26%)
+  jQuery.now
+    - desc 12/46 (26%)
+  jQuery.data
+    - desc 26/101 (26%)
+  has-selector
+    - desc 23/88 (26%)
+  event.preventDefault
+    - desc 21/80 (26%)
+  closest
+    - desc 43/163 (26%)
+  callbacks.remove
+    - desc 18/68 (26%)
+  callbacks.disabled
+    - desc 13/50 (26%)
+  addBack
+    - desc 26/100 (26%)
+  toggle-event
+    - desc 23/86 (27%)
+  text
+    - desc 29/107 (27%)
+  scrollTop
+    - longdesc 52/194 (27%)
+  removeData
+    - desc 11/41 (27%)
+  queue
+    - desc 18/67 (27%)
+  odd
+    - desc 22/82 (27%)
+  not
+    - desc 13/49 (27%)
+  last
+    - desc 17/63 (27%)
+  first
+    - desc 16/59 (27%)
+  filter
+    - desc 26/96 (27%)
+  event.target
+    - desc 11/41 (27%)
+  event.relatedTarget
+    - desc 14/52 (27%)
+  deferred.always
+    - desc 22/82 (27%)
+  contains-selector
+    - desc 14/52 (27%)
+  child-selector
+    - desc 24/89 (27%)
+  callbacks.locked
+    - desc 13/48 (27%)
+  callbacks.add
+    - desc 17/63 (27%)
+  before
+    - desc 26/95 (27%)
+  attribute-contains-word-selector
+    - desc 29/109 (27%)
+  slice
+    - desc 22/79 (28%)
+  selector
+    - desc 26/92 (28%)
+  on
+    - desc 23/81 (28%)
+  nth-last-child-selector
+    - desc 29/105 (28%)
+  last-of-type-selector
+    - longdesc 44/155 (28%)
+    - desc 23/79 (29%)
+  jQuery.parseJSON
+    - desc 21/75 (28%)
+  jQuery.escapeSelector
+    - desc 19/67 (28%)
+  has-attribute-selector
+    - desc 19/67 (28%)
+  focus-selector
+    - desc 12/43 (28%)
+  first-of-type-selector
+    - desc 22/80 (28%)
+  event.stopPropagation
+    - desc 32/114 (28%)
+  event.metaKey
+    - desc 18/64 (28%)
+  callbacks.has
+    - desc 38/138 (28%)
+  ajaxStop
+    - desc 23/82 (28%)
+  after
+    - desc 26/94 (28%)
+  trigger
+    - desc 27/93 (29%)
+  serializeArray
+    - desc 18/62 (29%)
+  parent-selector
+    - desc 24/82 (29%)
+  not-selector
+    - desc 17/58 (29%)
+  jQuery.queue
+    - desc 19/66 (29%)
+  jQuery.merge
+    - desc 18/63 (29%)
+  jQuery.data
+    - desc 26/91 (29%)
+  jQuery.contains
+    - desc 20/69 (29%)
+  finish
+    - desc 35/121 (29%)
+  event.currentTarget
+    - desc 16/56 (29%)
+  each
+    - desc 22/76 (29%)
+  descendant-selector
+    - longdesc 30/102 (29%)
+  contents
+    - desc 28/98 (29%)
+  callbacks.lock
+    - desc 12/42 (29%)
+  andSelf
+    - desc 19/65 (29%)
+  ajaxStart
+    - desc 23/79 (29%)
+  ajaxError
+    - desc 25/86 (29%)
+  stop
+    - desc 18/61 (30%)
+  jQuery.map
+    - desc 19/64 (30%)
+  jQuery.isEmptyObject
+    - desc 21/71 (30%)
+  empty
+    - desc 20/67 (30%)
+============================================================
+
