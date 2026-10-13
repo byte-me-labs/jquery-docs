@@ -10,7 +10,7 @@
     "chm:compile": "node scripts/chm-compile.js"
   },
   "dependencies": {
-    "ejs": "^6.0.1",
+    "ejs": "^7.0.1",
     "fast-xml-parser": "^5.10.0",
     "fs-extra": "^11.4.0",
     "glob": "^13.0.6",
