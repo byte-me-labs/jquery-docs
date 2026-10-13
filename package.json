@@ -14,7 +14,7 @@
     "fast-xml-parser": "^5.10.0",
     "fs-extra": "^11.4.0",
     "glob": "^13.0.6",
-    "he": "^1.2.0",
+    "he": "^2.0.0",
     "highlight.js": "^11.10.0",
     "iconv-lite": "^0.7.3"
   }
